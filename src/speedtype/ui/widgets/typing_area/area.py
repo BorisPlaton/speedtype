@@ -9,7 +9,7 @@ from textual.reactive import var
 from textual.worker import Worker
 
 from speedtype.ui.widgets.base import BaseWidget
-from speedtype.ui.widgets.text_configuration import TextConfig, TextConfiguration
+from speedtype.ui.widgets.text_configuration import SelectedTextConfig, TextConfiguration
 from speedtype.ui.widgets.typing_area.text_input import TextInput
 
 
@@ -83,7 +83,7 @@ class TypingArea(BaseWidget):
         }}
     }}
     """
-    text_config: var[TextConfig] = var(None, init=False)
+    text_config: var[SelectedTextConfig] = var(None, init=False)
     text: var[str] = var("", init=False)
 
     def __init__(self, *args, **kwargs) -> None:

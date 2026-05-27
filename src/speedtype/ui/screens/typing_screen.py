@@ -105,5 +105,5 @@ class TypingScreen(BaseScreen):
         event: TextConfiguration.ConfigUpdated,
     ) -> None:
         typing_area = self.query_one(TypingArea)
-        typing_area.text_config = event.text_config
+        typing_area.text_config = event.selected_text_config
         typing_area.mutate_reactive(TypingArea.text_config)
