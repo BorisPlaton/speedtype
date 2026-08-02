@@ -1,0 +1,31 @@
+services:
+  backend-app:
+    image: borisplaton/zeus:latest
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "${ZEUS_PORT}:${ZEUS_PORT}"
+    env_file:
+      - "${ENV_FILE}"
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: pyproject.toml
+        - action: sync+restart
+          path: "${ENV_FILE}"
+          target: /dev/null
+
+  mongodb:
+    image: mongo:7.0.34
+    env_file:
+      - "${ENV_FILE}"
+    command: [ "--port", "${MONGO_PORT}" ]
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
