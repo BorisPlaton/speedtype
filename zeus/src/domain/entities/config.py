@@ -4,8 +4,8 @@ from typing import ClassVar
 
 from funcy import first
 
-from domain.constraints.display_unique import DisplayUniqueConstraint
-from domain.constraints.one_default import NotMoreThanOneDefaultConstraint
+from domain.constraints.display_unique_config_entries import DisplayUniqueConfigEntriesConstraint
+from domain.constraints.one_default_config_entry import NotMoreThanOneDefaultConfigEntryConstraint
 from domain.exceptions.config import DefaultOptionAlreadyExists, OptionWithValueDoesntExist
 from domain.value_objects.base import ConfigEntry
 
@@ -22,12 +22,12 @@ class Config[Option: ConfigEntry[object]](ABC):
         *,
         options: list[Option],
     ) -> Config:
-        NotMoreThanOneDefaultConstraint(
+        NotMoreThanOneDefaultConfigEntryConstraint(
             items=options,
             exact_one=cls.is_required,
             name=cls.name,
         ).check()
-        DisplayUniqueConstraint(items=options).check()
+        DisplayUniqueConfigEntriesConstraint(items=options).check()
         return cls(options=options)
 
     def add_option(
@@ -43,7 +43,7 @@ class Config[Option: ConfigEntry[object]](ABC):
                 default_value=default_option.value,
             )
 
-        DisplayUniqueConstraint(items=self.options).check()
+        DisplayUniqueConfigEntriesConstraint(items=self.options).check()
 
         self.options.append(option)
 
@@ -64,6 +64,13 @@ class Config[Option: ConfigEntry[object]](ABC):
 
         new_default.is_default = True
         self.default_option.is_default = False
+
+    def get_option(
+        self,
+        *,
+        option: object,
+    ) -> Option | None:
+        return next(filter(lambda x: x.value == option, self.options))
 
     @property
     def default_option(self) -> Option | None:

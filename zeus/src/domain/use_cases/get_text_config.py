@@ -19,14 +19,14 @@ class GetTextConfig(UseCase[TextConfig]):
     ) -> None:
         self._words_length_repository = words_length_repository
         self._time_limit_repository = time_limits_repository
-        self._text_language_repository = text_languages_repository
+        self._text_languages_repository = text_languages_repository
         self._special_symbols_repository = special_symbols_repository
 
     async def execute(self) -> TextConfig:
         async with asyncio.TaskGroup() as tg:
             words_length_task = tg.create_task(self._words_length_repository.get())
             time_limit_task = tg.create_task(self._time_limit_repository.get())
-            text_language_task = tg.create_task(self._text_language_repository.get())
+            text_language_task = tg.create_task(self._text_languages_repository.get())
             special_symbols_task = tg.create_task(self._special_symbols_repository.get())
 
         return TextConfig(

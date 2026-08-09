@@ -5,7 +5,7 @@ from domain.exceptions.constraint.one_default import OneDefaultItemMustExist
 from domain.value_objects.base import ConfigEntry
 
 
-class NotMoreThanOneDefaultConstraint(Constraint):
+class NotMoreThanOneDefaultConfigEntryConstraint(Constraint):
     def __init__(self, *, items: list[ConfigEntry], exact_one: bool, name: str) -> None:
         self._items = items
         self._name = name

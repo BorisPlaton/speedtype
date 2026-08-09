@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.constraints.not_empty import NotEmptyStringConstraint
+from domain.constraints.not_empty_string import NotEmptyStringConstraint
 from domain.value_objects.base import ConfigEntry
 
 
