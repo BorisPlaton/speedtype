@@ -17,7 +17,7 @@ async def migrate(
     migration_id: Annotated[
         MigrationID | None,
         Option(
-            help="The migration ID to migrate. If not specified, runs all migrations.",
+            help="The specific migration to execute. If not specified, runs all migrations.",
             show_default=False,
         ),
     ] = None,
@@ -25,7 +25,8 @@ async def migrate(
     """
     Performs application migration.
 
-    If the --migration-id is provided, run only a specified migration.
+    Migrations are idempotent. So it is safe to run a single migration multiple times.
+    If the `--migration-id` is provided, run only a specified migration.
     """
     container: ApplicationContainer = ctx.obj
 

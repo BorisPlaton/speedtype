@@ -1,30 +1,32 @@
 from typing import TypedDict
 
-from domain.entities.time_limits import TimeLimits
-from domain.value_objects.input_time import InputTime
+from domain.entities.config import SpecialSymbols
+from domain.value_objects.special_symbol_type import SpecialSymbolType
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class TimeLimitsMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
-    class TimeLimitsRecord(TypedDict):
-        options: list[TimeLimitsMongoDBRepository.TimeLimitsRecordOption]
+class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
+    class SpecialSymbolsRecord(TypedDict):
+        options: list[SpecialSymbolsMongoDBRepository.SpecialSymbolRecordOption]
 
-    class TimeLimitsRecordOption(TypedDict):
-        value: int
+    class SpecialSymbolRecordOption(TypedDict):
+        title: str
+        value: str
         is_default: bool
 
     @property
     def collection_name(self) -> str:
-        return "time_limits"
+        return "special_symbols"
 
     def _to_json(
         self,
         *,
-        entity: TimeLimits,
-    ) -> TimeLimitsRecord:
+        entity: SpecialSymbols,
+    ) -> SpecialSymbolsRecord:
         return {
             "options": [
                 {
+                    "title": option.title,
                     "value": option.value,
                     "is_default": option.is_default,
                 }
@@ -35,13 +37,14 @@ class TimeLimitsMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
     def _from_json(
         self,
         *,
-        data: TimeLimitsRecord,
-    ) -> TimeLimits:
-        return TimeLimits(
+        data: SpecialSymbolsRecord,
+    ) -> SpecialSymbols:
+        return SpecialSymbols(
             options=[
-                InputTime(
+                SpecialSymbolType(
                     is_default=option["is_default"],
                     value=option["value"],
+                    title=option["title"],
                 )
                 for option in data["options"]
             ]

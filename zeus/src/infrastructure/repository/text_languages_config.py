@@ -1,28 +1,28 @@
 from typing import TypedDict
 
-from domain.entities.special_symbols import SpecialSymbols
-from domain.value_objects.special_symbol import SpecialSymbol
+from domain.entities.config import TextLanguages
+from domain.value_objects.language_option import LanguageOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
-    class SpecialSymbolsRecord(TypedDict):
-        options: list[SpecialSymbolsMongoDBRepository.SpecialSymbolRecordOption]
+class TextLanguagesMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
+    class TextLanguagesRecord(TypedDict):
+        options: list[TextLanguagesMongoDBRepository.TextLanguagesRecordOption]
 
-    class SpecialSymbolRecordOption(TypedDict):
+    class TextLanguagesRecordOption(TypedDict):
         title: str
         value: str
         is_default: bool
 
     @property
     def collection_name(self) -> str:
-        return "special_symbols"
+        return "text_languages"
 
     def _to_json(
         self,
         *,
-        entity: SpecialSymbols,
-    ) -> SpecialSymbolsRecord:
+        entity: TextLanguages,
+    ) -> TextLanguagesRecord:
         return {
             "options": [
                 {
@@ -37,11 +37,11 @@ class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
     def _from_json(
         self,
         *,
-        data: SpecialSymbolsRecord,
-    ) -> SpecialSymbols:
-        return SpecialSymbols(
+        data: TextLanguagesRecord,
+    ) -> TextLanguages:
+        return TextLanguages(
             options=[
-                SpecialSymbol(
+                LanguageOption(
                     is_default=option["is_default"],
                     value=option["value"],
                     title=option["title"],

@@ -1,9 +1,11 @@
 import asyncio
 
-from domain.repository.special_symbols import SpecialSymbolsRepository
-from domain.repository.text_languages import TextLanguagesRepository
-from domain.repository.time_limits import TimeLimitsRepository
-from domain.repository.words_length import WordsLengthRepository
+from domain.repository.config import (
+    SpecialSymbolsRepository,
+    TextLanguagesRepository,
+    TimeLimitsRepository,
+    WordsLengthRepository,
+)
 from domain.use_cases.base import UseCase
 from domain.use_cases.types.text_config import TextConfig
 

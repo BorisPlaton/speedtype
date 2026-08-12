@@ -1,7 +1,7 @@
 from typing import TypedDict
 
-from domain.entities.words_length import WordsLength
-from domain.value_objects.word_length import WordLength
+from domain.entities.config import WordsLength
+from domain.value_objects.word_length_option import WordLengthOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
@@ -33,7 +33,7 @@ class WordsLengthMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
     def _from_json(self, *, data: WordsLengthRecord) -> WordsLength:
         return WordsLength(
             options=[
-                WordLength(
+                WordLengthOption(
                     is_default=option["is_default"],
                     value=option["value"],
                     title=option["title"],

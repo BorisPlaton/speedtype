@@ -4,9 +4,8 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.constraints.not_empty_string import NotEmptyStringConstraint
-from domain.value_objects.language import Language
-from domain.value_objects.special_symbol import SpecialSymbol
-from domain.value_objects.word_length import WordLength
+from domain.value_objects.language_option import LanguageOption
+from domain.value_objects.word_length_option import WordLengthOption
 
 
 @dataclass(kw_only=True, slots=True)
@@ -15,22 +14,19 @@ class Word(ABC):
     value: str
     language_value: str
     word_length_value: str
-    special_symbol_type: str | None
 
     @classmethod
     def new(
         cls,
         *,
-        value: str,
-        language: Language,
-        word_length: WordLength,
-        special_symbol: SpecialSymbol | None,
+        word: str,
+        language: LanguageOption,
+        word_length: WordLengthOption,
     ) -> Word:
-        NotEmptyStringConstraint(value=value, name="Word's value").check()
+        NotEmptyStringConstraint(value=word, name="Word's value").check()
         return cls(
             id=uuid.uuid4(),
-            value=value,
+            value=word,
             language_value=language.value,
             word_length_value=word_length.value,
-            special_symbol_type=special_symbol.value if special_symbol else None,
         )

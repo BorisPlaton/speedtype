@@ -5,16 +5,16 @@ from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(slots=True, frozen=True, kw_only=True)
-class InputTime(ConfigEntry[int]):
+class InputTimeOption(ConfigEntry[int]):
     @classmethod
     def new(
         cls,
         *,
         seconds: int,
         is_default: bool,
-    ) -> InputTime:
+    ) -> InputTimeOption:
         cls._check_seconds(seconds=seconds)
-        return InputTime(
+        return InputTimeOption(
             value=seconds,
             is_default=is_default,
         )

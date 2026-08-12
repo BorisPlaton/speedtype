@@ -2,14 +2,18 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Configuration, Provider, Singleton
 from pymongo import AsyncMongoClient
 
-from domain.repository.special_symbols import SpecialSymbolsRepository
-from domain.repository.text_languages import TextLanguagesRepository
-from domain.repository.time_limits import TimeLimitsRepository
-from domain.repository.words_length import WordsLengthRepository
-from infrastructure.repository.special_symbols import SpecialSymbolsMongoDBRepository
-from infrastructure.repository.text_languages import TextLanguagesMongoDBRepository
-from infrastructure.repository.time_limits import TimeLimitsMongoDBRepository
-from infrastructure.repository.words_length import WordsLengthMongoDBRepository
+from domain.repository.config import (
+    SpecialSymbolsRepository,
+    TextLanguagesRepository,
+    TimeLimitsRepository,
+    WordsLengthRepository,
+)
+from domain.repository.special_symbol import SpecialSymbolRepository
+from domain.repository.word import WordRepository
+from infrastructure.repository.special_symbols_config import SpecialSymbolsMongoDBRepository
+from infrastructure.repository.text_languages_config import TextLanguagesMongoDBRepository
+from infrastructure.repository.time_limits_config import TimeLimitsMongoDBRepository
+from infrastructure.repository.words_length_config import WordsLengthMongoDBRepository
 
 
 class InfrastructureContainer(DeclarativeContainer):
@@ -24,11 +28,11 @@ class InfrastructureContainer(DeclarativeContainer):
         authSource=config.mongodb.AUTH_SOURCE,
     )
 
-    special_symbols_repository: Provider[SpecialSymbolsRepository] = Singleton(
+    special_symbols_config_repository: Provider[SpecialSymbolsRepository] = Singleton(
         SpecialSymbolsMongoDBRepository,
         mongo_client=mongo_client,
     )
-    text_languages_repository: Provider[TextLanguagesRepository] = Singleton(
+    text_languages_config_repository: Provider[TextLanguagesRepository] = Singleton(
         TextLanguagesMongoDBRepository,
         mongo_client=mongo_client,
     )
@@ -36,7 +40,15 @@ class InfrastructureContainer(DeclarativeContainer):
         TimeLimitsMongoDBRepository,
         mongo_client=mongo_client,
     )
-    words_length_repository: Provider[WordsLengthRepository] = Singleton(
+    words_length_config_repository: Provider[WordsLengthRepository] = Singleton(
         WordsLengthMongoDBRepository,
+        mongo_client=mongo_client,
+    )
+    word_repository: Provider[WordRepository] = Singleton(
+        WordRepository,
+        mongo_client=mongo_client,
+    )
+    special_symbol_repository: Provider[SpecialSymbolRepository] = Singleton(
+        SpecialSymbolRepository,
         mongo_client=mongo_client,
     )

@@ -5,7 +5,7 @@ from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(kw_only=True, slots=True, frozen=True)
-class SpecialSymbol(ConfigEntry[str]):
+class WordLengthOption(ConfigEntry[str]):
     title: str
 
     @classmethod
@@ -15,16 +15,16 @@ class SpecialSymbol(ConfigEntry[str]):
         title: str,
         code: str,
         is_default: bool,
-    ) -> SpecialSymbol:
+    ) -> WordLengthOption:
         NotEmptyStringConstraint(
             value=title,
-            name="Special Symbol title",
+            name="Word Length title",
         ).check()
         NotEmptyStringConstraint(
             value=code,
-            name="Special Symbol code",
+            name="Word Length code",
         ).check()
-        return SpecialSymbol(
+        return WordLengthOption(
             title=title,
             value=code,
             is_default=is_default,

@@ -5,7 +5,7 @@ from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(kw_only=True, slots=True, frozen=True)
-class Language(ConfigEntry[str]):
+class SpecialSymbolType(ConfigEntry[str]):
     title: str
 
     @classmethod
@@ -15,16 +15,16 @@ class Language(ConfigEntry[str]):
         title: str,
         code: str,
         is_default: bool,
-    ) -> Language:
+    ) -> SpecialSymbolType:
         NotEmptyStringConstraint(
             value=title,
-            name="Language title",
+            name="Special Symbol title",
         ).check()
         NotEmptyStringConstraint(
             value=code,
-            name="Language code",
+            name="Special Symbol code",
         ).check()
-        return Language(
+        return SpecialSymbolType(
             title=title,
             value=code,
             is_default=is_default,

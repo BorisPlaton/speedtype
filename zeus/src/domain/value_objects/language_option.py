@@ -5,7 +5,7 @@ from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(kw_only=True, slots=True, frozen=True)
-class WordLength(ConfigEntry[str]):
+class LanguageOption(ConfigEntry[str]):
     title: str
 
     @classmethod
@@ -15,16 +15,16 @@ class WordLength(ConfigEntry[str]):
         title: str,
         code: str,
         is_default: bool,
-    ) -> WordLength:
+    ) -> LanguageOption:
         NotEmptyStringConstraint(
             value=title,
-            name="Word Length title",
+            name="Language title",
         ).check()
         NotEmptyStringConstraint(
             value=code,
-            name="Word Length code",
+            name="Language code",
         ).check()
-        return WordLength(
+        return LanguageOption(
             title=title,
             value=code,
             is_default=is_default,

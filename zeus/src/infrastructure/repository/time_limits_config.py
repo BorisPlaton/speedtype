@@ -1,32 +1,30 @@
 from typing import TypedDict
 
-from domain.entities.text_languages import TextLanguages
-from domain.value_objects.language import Language
+from domain.entities.config import TimeLimits
+from domain.value_objects.input_time_option import InputTimeOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class TextLanguagesMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
-    class TextLanguagesRecord(TypedDict):
-        options: list[TextLanguagesMongoDBRepository.TextLanguagesRecordOption]
+class TimeLimitsMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
+    class TimeLimitsRecord(TypedDict):
+        options: list[TimeLimitsMongoDBRepository.TimeLimitsRecordOption]
 
-    class TextLanguagesRecordOption(TypedDict):
-        title: str
-        value: str
+    class TimeLimitsRecordOption(TypedDict):
+        value: int
         is_default: bool
 
     @property
     def collection_name(self) -> str:
-        return "text_languages"
+        return "time_limits"
 
     def _to_json(
         self,
         *,
-        entity: TextLanguages,
-    ) -> TextLanguagesRecord:
+        entity: TimeLimits,
+    ) -> TimeLimitsRecord:
         return {
             "options": [
                 {
-                    "title": option.title,
                     "value": option.value,
                     "is_default": option.is_default,
                 }
@@ -37,14 +35,13 @@ class TextLanguagesMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
     def _from_json(
         self,
         *,
-        data: TextLanguagesRecord,
-    ) -> TextLanguages:
-        return TextLanguages(
+        data: TimeLimitsRecord,
+    ) -> TimeLimits:
+        return TimeLimits(
             options=[
-                Language(
+                InputTimeOption(
                     is_default=option["is_default"],
                     value=option["value"],
-                    title=option["title"],
                 )
                 for option in data["options"]
             ]
