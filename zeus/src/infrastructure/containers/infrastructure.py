@@ -3,13 +3,13 @@ from dependency_injector.providers import Configuration, Provider, Singleton
 from pymongo import AsyncMongoClient
 
 from domain.repository.config import (
-    SpecialSymbolsRepository,
-    TextLanguagesRepository,
-    TimeLimitsRepository,
-    WordsLengthRepository,
+    SpecialSymbolsConfigRepository,
+    TextLanguagesConfigRepository,
+    TimeLimitsConfigRepository,
+    WordsLengthConfigRepository,
 )
-from domain.repository.special_symbol import SpecialSymbolRepository
-from domain.repository.word import WordRepository
+from domain.repository.special_symbol import SpecialSymbolsRepository
+from domain.repository.word import WordsRepository
 from infrastructure.repository.special_symbols_config import SpecialSymbolsMongoDBRepository
 from infrastructure.repository.text_languages_config import TextLanguagesMongoDBRepository
 from infrastructure.repository.time_limits_config import TimeLimitsMongoDBRepository
@@ -28,27 +28,27 @@ class InfrastructureContainer(DeclarativeContainer):
         authSource=config.mongodb.AUTH_SOURCE,
     )
 
-    special_symbols_config_repository: Provider[SpecialSymbolsRepository] = Singleton(
+    special_symbols_config_repository: Provider[SpecialSymbolsConfigRepository] = Singleton(
         SpecialSymbolsMongoDBRepository,
         mongo_client=mongo_client,
     )
-    text_languages_config_repository: Provider[TextLanguagesRepository] = Singleton(
+    text_languages_config_repository: Provider[TextLanguagesConfigRepository] = Singleton(
         TextLanguagesMongoDBRepository,
         mongo_client=mongo_client,
     )
-    time_limits_repository: Provider[TimeLimitsRepository] = Singleton(
+    time_limits_repository: Provider[TimeLimitsConfigRepository] = Singleton(
         TimeLimitsMongoDBRepository,
         mongo_client=mongo_client,
     )
-    words_length_config_repository: Provider[WordsLengthRepository] = Singleton(
+    words_length_config_repository: Provider[WordsLengthConfigRepository] = Singleton(
         WordsLengthMongoDBRepository,
         mongo_client=mongo_client,
     )
-    word_repository: Provider[WordRepository] = Singleton(
-        WordRepository,
+    words_repository: Provider[WordsRepository] = Singleton(
+        WordsRepository,
         mongo_client=mongo_client,
     )
-    special_symbol_repository: Provider[SpecialSymbolRepository] = Singleton(
-        SpecialSymbolRepository,
+    special_symbols_repository: Provider[SpecialSymbolsRepository] = Singleton(
+        SpecialSymbolsRepository,
         mongo_client=mongo_client,
     )

@@ -5010,8 +5010,8 @@ class MigrationV2(Migration):
         self._words_length_config_repo = container.infra.words_length_config_repository()
         self._text_languages_config_repo = container.infra.text_languages_config_repository()
         self._special_symbols_config_repo = container.infra.special_symbols_config_repository()
-        self._word_repository = container.infra.word_repository()
-        self._special_symbol_repository = container.infra.special_symbol_repository()
+        self._words_repository = container.infra.words_repository()
+        self._special_symbols_repository = container.infra.special_symbols_repository()
 
     async def execute(self) -> None:
         words_length_config = await self._words_length_config_repo.get()
@@ -5022,7 +5022,7 @@ class MigrationV2(Migration):
             for word_length, words_list in words_by_length_map.items():
                 language_option = text_languages_config.get_option(option=language)
                 word_length_option = words_length_config.get_option(option=word_length)
-                await self._word_repository.upsert_many(
+                await self._words_repository.upsert_many(
                     entries=[
                         Word.new(
                             word=word,
@@ -5035,7 +5035,7 @@ class MigrationV2(Migration):
 
         for special_symbol, symbols in SPECIAL_SYMBOLS.items():
             special_symbol_option = special_symbols_config.get_option(option=special_symbol)
-            await self._special_symbol_repository.upsert_many(
+            await self._special_symbols_repository.upsert_many(
                 entries=[
                     SpecialSymbol.new(
                         special_symbol=symbol,

@@ -11,17 +11,17 @@ class ConfigRepository[Entity: Config](ABC):
     async def upsert(self, *, config: Entity) -> None: ...
 
 
-class TextLanguagesRepository(ConfigRepository[TextLanguages], ABC):
+class TextLanguagesConfigRepository(ConfigRepository[TextLanguages], ABC):
     pass
 
 
-class SpecialSymbolsRepository(ConfigRepository[SpecialSymbols], ABC):
+class SpecialSymbolsConfigRepository(ConfigRepository[SpecialSymbols], ABC):
     pass
 
 
-class TimeLimitsRepository(ConfigRepository[TimeLimits], ABC):
+class TimeLimitsConfigRepository(ConfigRepository[TimeLimits], ABC):
     pass
 
 
-class WordsLengthRepository(ConfigRepository[WordsLength], ABC):
+class WordsLengthConfigRepository(ConfigRepository[WordsLength], ABC):
     pass

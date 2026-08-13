@@ -5,7 +5,7 @@ from domain.value_objects.language_option import LanguageOption
 from domain.value_objects.word_length_option import WordLengthOption
 
 
-class WordRepository(ABC):
+class WordsRepository(ABC):
     @abstractmethod
     async def upsert_many(self, *, entries: list[Word]) -> None: ...
 
@@ -13,6 +13,6 @@ class WordRepository(ABC):
     async def get_by_characteristics(
         self,
         *,
-        language: LanguageOption | None,
-        word_length: WordLengthOption | None,
+        language: LanguageOption,
+        word_length: WordLengthOption,
     ) -> list[Word]: ...

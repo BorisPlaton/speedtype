@@ -4,13 +4,17 @@ from domain.entities.special_symbol import SpecialSymbol
 from domain.value_objects.special_symbol_type import SpecialSymbolType
 
 
-class SpecialSymbolRepository(ABC):
+class SpecialSymbolsRepository(ABC):
     @abstractmethod
-    async def upsert_many(self, *, entries: list[SpecialSymbol]) -> None: ...
-
-    @abstractmethod
-    async def get_by_type(
+    async def upsert_many(
         self,
         *,
-        special_symbol: SpecialSymbolType,
+        entries: list[SpecialSymbol],
+    ) -> None: ...
+
+    @abstractmethod
+    async def get_by_types(
+        self,
+        *,
+        special_symbol_types: list[SpecialSymbolType],
     ) -> list[SpecialSymbol]: ...
