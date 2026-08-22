@@ -10,7 +10,7 @@ from textual.message import Message
 from textual.reactive import reactive
 
 from speedtype.outbound.zeus.client import ZeusClient
-from speedtype.outbound.zeus.contracts.fetch_text_config import TextConfigResponseContract
+from speedtype.outbound.zeus.contracts.get_text_config import TextConfigResponseContract
 from speedtype.ui.constants.classes import CSSClass
 from speedtype.ui.widgets.menu_island.island import MenuIsland
 from speedtype.ui.widgets.menu_island.text import MenuIslandText

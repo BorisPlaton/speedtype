@@ -14,7 +14,7 @@ router = APIRouter(prefix="/text")
 
 
 @router.post("/words", response_model_exclude_none=True)
-async def get_text_text(
+async def get_text_words(
     container: Annotated[DomainContainer, Depends(get_domain_container)],
     words_properties: GetTextWordsRequestContract,
 ) -> GetTextWordsResponseContract:
