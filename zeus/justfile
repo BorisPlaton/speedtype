@@ -1,3 +1,8 @@
+env_file := "./envs/.env.local"
+
+set dotenv-path := env_file
+set dotenv-load
+
 # Displays available commands.
 help:
     @just --list
@@ -17,16 +22,37 @@ format:
     ruff check --fix
 
 # Start zeus and all corresponding services.
-zeus-up env_file="envs/.env.local":
-    ENV_FILE="{{ env_file }}" docker compose --env-file="{{ env_file }}" up --build --watch
+[env("ENV_FILE", env_file)]
+[env("COMPOSE_ENV_FILES", env_file)]
+zeus-up:
+    docker compose up --build --watch
 
 # Stops zeus and all corresponding services.
-zeus-down env_file="envs/.env.local":
-    ENV_FILE="{{ env_file }}" docker compose --env-file="{{ env_file }}" down -t 5
+[env("ENV_FILE", env_file)]
+[env("COMPOSE_ENV_FILES", env_file)]
+zeus-down:
+    docker compose down -t 5
 
-# Enters zeus shell
-zeus-sh env_file="envs/.env.local":
-    ENV_FILE="{{ env_file }}" docker compose --env-file="{{ env_file }}" exec backend-app sh
+# Enters zeus shell.
+[env("ENV_FILE", env_file)]
+[env("COMPOSE_ENV_FILES", env_file)]
+zeus-sh:
+    docker compose exec backend-app sh
 
-run-migrations env_file="envs/.env.local":
-    ENV_FILE="{{ env_file }}" docker compose --env-file="{{ env_file }}" exec backend-app python /app/src/inbound/cli migrate
+# Run all existing zeus migrations.
+[env("ENV_FILE", env_file)]
+[env("COMPOSE_ENV_FILES", env_file)]
+run-migrations:
+    docker compose exec backend-app python /app/src/inbound/cli migrate
+
+# Connects to running MongoDB instance.
+[env("ENV_FILE", env_file)]
+[env("COMPOSE_ENV_FILES", env_file)]
+mongodb-connect:
+    docker compose exec mongodb mongosh \
+        --username "${MONGO_USERNAME}" \
+        --password "${MONGO_PASSWORD}" \
+        --host "${MONGO_HOST}" \
+        --port "${MONGO_PORT}" \
+        --authenticationDatabase admin \
+        "${MONGO_DATABASE_NAME}"

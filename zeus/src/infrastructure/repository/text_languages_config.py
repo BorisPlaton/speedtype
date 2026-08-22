@@ -5,9 +5,9 @@ from domain.value_objects.language_option import LanguageOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class TextLanguagesMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
+class TextLanguagesConfigMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
     class TextLanguagesRecord(TypedDict):
-        options: list[TextLanguagesMongoDBRepository.TextLanguagesRecordOption]
+        options: list[TextLanguagesConfigMongoDBRepository.TextLanguagesRecordOption]
 
     class TextLanguagesRecordOption(TypedDict):
         title: str
@@ -15,7 +15,7 @@ class TextLanguagesMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
         is_default: bool
 
     @property
-    def collection_name(self) -> str:
+    def _collection_name(self) -> str:
         return "text_languages"
 
     def _to_json(

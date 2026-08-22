@@ -1,15 +1,11 @@
-import uuid
-from abc import ABC
 from dataclasses import dataclass
-from uuid import UUID
 
 from domain.constraints.not_empty_string import NotEmptyStringConstraint
 from domain.value_objects.special_symbol_type import SpecialSymbolType
 
 
 @dataclass(kw_only=True, slots=True)
-class SpecialSymbol(ABC):
-    id: UUID
+class SpecialSymbol:
     value: str
     special_symbol_type: str
 
@@ -22,7 +18,6 @@ class SpecialSymbol(ABC):
     ) -> SpecialSymbol:
         NotEmptyStringConstraint(value=special_symbol, name="Special symbol's value").check()
         return cls(
-            id=uuid.uuid4(),
             value=special_symbol,
             special_symbol_type=special_symbol_type.value,
         )

@@ -5,9 +5,9 @@ from domain.value_objects.word_length_option import WordLengthOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class WordsLengthMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
+class WordsLengthConfigMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
     class WordsLengthRecord(TypedDict):
-        options: list[WordsLengthMongoDBRepository.WordsLengthRecordOption]
+        options: list[WordsLengthConfigMongoDBRepository.WordsLengthRecordOption]
 
     class WordsLengthRecordOption(TypedDict):
         title: str
@@ -15,7 +15,7 @@ class WordsLengthMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
         is_default: bool
 
     @property
-    def collection_name(self) -> str:
+    def _collection_name(self) -> str:
         return "words_length"
 
     def _to_json(self, *, entity: WordsLength) -> WordsLengthRecord:

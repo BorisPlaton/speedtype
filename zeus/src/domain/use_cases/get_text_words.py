@@ -33,7 +33,7 @@ class GetTextWords(UseCase[TextWords]):
         self,
         *,
         language: str,
-        word_length: str,
+        words_length: str,
         special_symbol_types: list[str] | None,
     ) -> TextWords:
         async with asyncio.TaskGroup() as tg:
@@ -43,10 +43,10 @@ class GetTextWords(UseCase[TextWords]):
         words_length_config = words_length_task.result()
         text_language_config = text_language_task.result()
 
-        if not (word_length_option := words_length_config.get_option(option=word_length)):
+        if not (word_length_option := words_length_config.get_option(option=words_length)):
             raise ConfigOptionDoesntExist(
                 config_name=WordsLength.name,
-                non_existed_option=word_length,
+                non_existed_option=words_length,
             )
 
         if not (text_language_option := text_language_config.get_option(option=language)):

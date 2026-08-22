@@ -5,16 +5,16 @@ from domain.value_objects.input_time_option import InputTimeOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class TimeLimitsMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
+class TimeLimitsConfigMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
     class TimeLimitsRecord(TypedDict):
-        options: list[TimeLimitsMongoDBRepository.TimeLimitsRecordOption]
+        options: list[TimeLimitsConfigMongoDBRepository.TimeLimitsRecordOption]
 
     class TimeLimitsRecordOption(TypedDict):
         value: int
         is_default: bool
 
     @property
-    def collection_name(self) -> str:
+    def _collection_name(self) -> str:
         return "time_limits"
 
     def _to_json(
