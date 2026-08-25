@@ -1,8 +1,6 @@
 from enum import StrEnum
-from typing import NamedTuple
 
 from dependency_injector.wiring import Provide, inject
-from funcy import select
 from rich.repr import Result
 from textual import events, on
 from textual.app import ComposeResult
@@ -12,6 +10,7 @@ from textual.reactive import reactive
 from speedtype.outbound.zeus.client import ZeusClient
 from speedtype.outbound.zeus.contracts.get_text_config import TextConfigResponseContract
 from speedtype.ui.constants.classes import CSSClass
+from speedtype.ui.types.text_config import SelectedTextConfig, TextConfigName, TextConfigOption
 from speedtype.ui.widgets.menu_island.island import MenuIsland
 from speedtype.ui.widgets.menu_island.text import MenuIslandText
 from speedtype.ui.widgets.section_menu_island import (
@@ -22,22 +21,15 @@ from speedtype.ui.widgets.section_menu_island import (
 )
 
 
-type SelectedTextConfig = dict[str, list[TextConfigOption]]
-
-
-class TextConfigOption(NamedTuple):
-    label: str
-    value: str | None = None
-
-
 class TextConfiguration(MenuIsland):
     text_config: reactive[TextConfigResponseContract] = reactive(None, init=False, recompose=True)
     text_config: TextConfigResponseContract
 
-    class Configuration(StrEnum):
+    class SectionName(StrEnum):
         TIME = "TIME"
         LANGUAGE = "LANGUAGE"
-        DIFFICULTY = "DIFFICULTY"
+        WORDS_CONFIG = "WORDS CONFIG"
+        SECTIONS_PANE = "sections_pane"
 
     class ConfigUpdated(Message):
         def __init__(
@@ -60,8 +52,7 @@ class TextConfiguration(MenuIsland):
         super().__init__(*args, **kwargs)
 
         self._zeus_client = zeus_client
-        self._text_config: SelectedTextConfig = {}
-        self._customization_sections_name = "config_menu"
+        self._text_config = SelectedTextConfig.new()
 
     def compose(self) -> ComposeResult:
         if not self.text_config:
@@ -70,20 +61,20 @@ class TextConfiguration(MenuIsland):
         yield SectionMenuIsland(
             options=(
                 SectionOption(
-                    label=self.Configuration.TIME,
-                    value=self.Configuration.TIME,
+                    label=self.SectionName.TIME,
+                    value=TextConfigName.TIME,
                     css_class=CSSClass.SELECTED,
                 ),
                 SectionOption(
-                    label=self.Configuration.LANGUAGE,
-                    value=self.Configuration.LANGUAGE,
+                    label=self.SectionName.LANGUAGE,
+                    value=TextConfigName.LANGUAGE,
                 ),
                 SectionOption(
-                    label=self.Configuration.DIFFICULTY,
-                    value=self.Configuration.DIFFICULTY,
+                    label=self.SectionName.WORDS_CONFIG,
+                    value=(TextConfigName.WORDS_LENGTH, TextConfigName.SPECIAL_SYMBOLS),
                 ),
             ),
-            name=self._customization_sections_name,
+            name=self.SectionName.SECTIONS_PANE,
             persistent=True,
             is_vertical=False,
         )
@@ -99,7 +90,7 @@ class TextConfiguration(MenuIsland):
                 )
                 for option in self.text_config.time_limits.options
             ),
-            name=self.Configuration.TIME,
+            name=TextConfigName.TIME,
             persistent=True,
             is_vertical=False,
         )
@@ -112,7 +103,7 @@ class TextConfiguration(MenuIsland):
                 )
                 for option in self.text_config.text_languages.options
             ),
-            name=self.Configuration.LANGUAGE,
+            name=TextConfigName.LANGUAGE,
             persistent=True,
             is_vertical=True,
         )
@@ -127,7 +118,7 @@ class TextConfiguration(MenuIsland):
                         )
                         for option in self.text_config.words_length.options
                     ),
-                    name=self.Configuration.DIFFICULTY,
+                    name=TextConfigName.WORDS_LENGTH,
                 ),
                 SectionConfiguration(
                     options=tuple(
@@ -139,7 +130,7 @@ class TextConfiguration(MenuIsland):
                         for option in self.text_config.special_symbols.options
                     ),
                     is_multiple_options=True,
-                    name=self.Configuration.DIFFICULTY,
+                    name=TextConfigName.SPECIAL_SYMBOLS,
                 ),
             ),
         )
@@ -153,17 +144,18 @@ class TextConfiguration(MenuIsland):
         self,
         event: SectionMenuIsland.OptionSelected,
     ) -> None:
-        if event.section_name != self._customization_sections_name:
-            self._text_config.setdefault(event.section_name, []).append(
-                TextConfigOption(value=event.value, label=event.label),
+        if event.section_name != self.SectionName.SECTIONS_PANE:
+            self._text_config.update_config_option(
+                config_name=event.section_name,
+                option=TextConfigOption(value=str(event.value), label=event.label),
             )
             self.post_message(self.ConfigUpdated(selected_text_config=self._text_config))
             return
 
         for section in self.query(SectionMenuIsland):
-            if section.name == event.value:
+            if section.name in event.value:
                 section.show()
-            elif section.name != self._customization_sections_name:
+            elif section.name != self.SectionName.SECTIONS_PANE:
                 section.hide()
 
     @on(SectionMenuIsland.OptionRemoved)
@@ -171,10 +163,10 @@ class TextConfiguration(MenuIsland):
         self,
         event: SectionMenuIsland.OptionRemoved,
     ) -> None:
-        if event.section_name != self._customization_sections_name:
-            self._text_config[event.section_name] = select(
-                lambda option: option.value != event.value,
-                self._text_config.setdefault(event.section_name, []),
+        if event.section_name != self.SectionName.SECTIONS_PANE:
+            self._text_config.remove_config_option_by_value(
+                config_name=event.section_name,
+                value=str(event.value),
             )
             self.post_message(self.ConfigUpdated(selected_text_config=self._text_config))
             return

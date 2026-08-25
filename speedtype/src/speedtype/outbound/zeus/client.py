@@ -12,6 +12,15 @@ class ZeusClient(ABC):
     @abstractmethod
     async def get_text_config(self) -> TextConfigResponseContract: ...
 
+    @abstractmethod
+    async def get_text_words(
+        self,
+        *,
+        language: str,
+        words_length: str,
+        special_symbol_types: list[str] | None = None,
+    ) -> GetTextWordsResponseContract: ...
+
 
 class ZeusHTTPClient(ZeusClient):
     GET_TEXT_CONFIG = "/text/config"

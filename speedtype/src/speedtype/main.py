@@ -9,6 +9,7 @@ def main() -> None:
     container.wire(
         modules=[
             "speedtype.ui.widgets.text_configuration",
+            "speedtype.ui.widgets.typing_area.area",
         ]
     )
     SpeedType().run()

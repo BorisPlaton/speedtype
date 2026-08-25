@@ -20,6 +20,10 @@ format:
 run-dev:
     ZEUS_URL="http://localhost:3550/" textual run --dev src/speedtype/main.py
 
+# Run textual's console for debugging. Used only for the development purposes.
+run-dev-console:
+    textual console -x SYSTEM -x EVENT -x DEBUG -x INFO
+
 # Installs speedtype globally.
 install:
     uv tool install --python 3.14 .

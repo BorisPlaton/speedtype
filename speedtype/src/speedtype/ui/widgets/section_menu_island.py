@@ -15,7 +15,7 @@ type SectionOptions = tuple[SectionOption, ...]
 
 class SectionOption(NamedTuple):
     label: str
-    value: str | None = None
+    value: object | None = None
     css_class: str | None = None
 
 
@@ -37,7 +37,7 @@ class SectionMenuIsland(BaseWidget):
     class OptionSelected(Message):
         def __init__(
             self,
-            value: str,
+            value: object,
             label: str,
             section_name: str,
         ) -> None:
@@ -54,7 +54,7 @@ class SectionMenuIsland(BaseWidget):
     class OptionRemoved(Message):
         def __init__(
             self,
-            value: str,
+            value: object,
             section_name: str,
         ) -> None:
             self.value = value
