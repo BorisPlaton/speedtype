@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from domain.constraints.not_empty import NotEmptyStringConstraint
+from domain.constraints.not_empty_string import NotEmptyStringConstraint
 from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(kw_only=True, slots=True, frozen=True)
-class Language(ConfigEntry[str]):
+class LanguageOption(ConfigEntry[str]):
     title: str
 
     @classmethod
@@ -15,7 +15,7 @@ class Language(ConfigEntry[str]):
         title: str,
         code: str,
         is_default: bool,
-    ) -> Language:
+    ) -> LanguageOption:
         NotEmptyStringConstraint(
             value=title,
             name="Language title",
@@ -24,7 +24,7 @@ class Language(ConfigEntry[str]):
             value=code,
             name="Language code",
         ).check()
-        return Language(
+        return LanguageOption(
             title=title,
             value=code,
             is_default=is_default,

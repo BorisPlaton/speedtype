@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from domain.constraints.not_empty import NotEmptyStringConstraint
+from domain.constraints.not_empty_string import NotEmptyStringConstraint
 from domain.value_objects.base import ConfigEntry
 
 
 @dataclass(kw_only=True, slots=True, frozen=True)
-class WordLength(ConfigEntry[str]):
+class WordLengthOption(ConfigEntry[str]):
     title: str
 
     @classmethod
@@ -15,7 +15,7 @@ class WordLength(ConfigEntry[str]):
         title: str,
         code: str,
         is_default: bool,
-    ) -> WordLength:
+    ) -> WordLengthOption:
         NotEmptyStringConstraint(
             value=title,
             name="Word Length title",
@@ -24,7 +24,7 @@ class WordLength(ConfigEntry[str]):
             value=code,
             name="Word Length code",
         ).check()
-        return WordLength(
+        return WordLengthOption(
             title=title,
             value=code,
             is_default=is_default,

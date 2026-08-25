@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 
-from domain.entities.special_symbols import SpecialSymbols
-from domain.entities.text_languages import TextLanguages
-from domain.entities.time_limits import TimeLimits
-from domain.entities.words_length import WordsLength
+from domain.entities.config import SpecialSymbols, TextLanguages, TimeLimits, WordsLength
 
 
 @dataclass(frozen=True, kw_only=True, slots=True)

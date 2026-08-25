@@ -1,7 +1,5 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 
 class BaseResponse(BaseModel):
-    model_config = ConfigDict(
-        frozen=True,
-    )
+    pass

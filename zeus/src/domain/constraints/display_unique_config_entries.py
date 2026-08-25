@@ -5,7 +5,7 @@ from domain.exceptions.constraint.display_unique import ItemDisplayTextMustBeUni
 from domain.value_objects.base import ConfigEntry
 
 
-class DisplayUniqueConstraint(Constraint):
+class DisplayUniqueConfigEntriesConstraint(Constraint):
     def __init__(
         self,
         *,

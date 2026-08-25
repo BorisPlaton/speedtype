@@ -1,24 +1,28 @@
 from typing import TypedDict
 
-from domain.entities.words_length import WordsLength
-from domain.value_objects.word_length import WordLength
+from domain.entities.config import TextLanguages
+from domain.value_objects.language_option import LanguageOption
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class WordsLengthMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
-    class WordsLengthRecord(TypedDict):
-        options: list[WordsLengthMongoDBRepository.WordsLengthRecordOption]
+class TextLanguagesConfigMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
+    class TextLanguagesRecord(TypedDict):
+        options: list[TextLanguagesConfigMongoDBRepository.TextLanguagesRecordOption]
 
-    class WordsLengthRecordOption(TypedDict):
+    class TextLanguagesRecordOption(TypedDict):
         title: str
         value: str
         is_default: bool
 
     @property
-    def collection_name(self) -> str:
-        return "words_length"
+    def _collection_name(self) -> str:
+        return "text_languages"
 
-    def _to_json(self, *, entity: WordsLength) -> WordsLengthRecord:
+    def _to_json(
+        self,
+        *,
+        entity: TextLanguages,
+    ) -> TextLanguagesRecord:
         return {
             "options": [
                 {
@@ -30,10 +34,14 @@ class WordsLengthMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
             ],
         }
 
-    def _from_json(self, *, data: WordsLengthRecord) -> WordsLength:
-        return WordsLength(
+    def _from_json(
+        self,
+        *,
+        data: TextLanguagesRecord,
+    ) -> TextLanguages:
+        return TextLanguages(
             options=[
-                WordLength(
+                LanguageOption(
                     is_default=option["is_default"],
                     value=option["value"],
                     title=option["title"],

@@ -1,13 +1,13 @@
 from typing import TypedDict
 
-from domain.entities.special_symbols import SpecialSymbols
-from domain.value_objects.special_symbol import SpecialSymbol
+from domain.entities.config import SpecialSymbols
+from domain.value_objects.special_symbol_type import SpecialSymbolType
 from infrastructure.repository.config import ConfigMongoDBRepository
 
 
-class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
+class SpecialSymbolsConfigMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
     class SpecialSymbolsRecord(TypedDict):
-        options: list[SpecialSymbolsMongoDBRepository.SpecialSymbolRecordOption]
+        options: list[SpecialSymbolsConfigMongoDBRepository.SpecialSymbolRecordOption]
 
     class SpecialSymbolRecordOption(TypedDict):
         title: str
@@ -15,7 +15,7 @@ class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
         is_default: bool
 
     @property
-    def collection_name(self) -> str:
+    def _collection_name(self) -> str:
         return "special_symbols"
 
     def _to_json(
@@ -41,7 +41,7 @@ class SpecialSymbolsMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
     ) -> SpecialSymbols:
         return SpecialSymbols(
             options=[
-                SpecialSymbol(
+                SpecialSymbolType(
                     is_default=option["is_default"],
                     value=option["value"],
                     title=option["title"],

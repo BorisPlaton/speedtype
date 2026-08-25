@@ -37,7 +37,13 @@ extend-exclude = [
 src = ["src"]
 
 [tool.ruff.lint]
-ignore = ["ANN002", "ANN003", "COM812", "N818"]
+ignore = [
+    "ANN002",
+    "ANN003",
+    "COM812",
+    "N818",
+    "TRY003",
+]
 preview = true
 select = [
     "ANN",

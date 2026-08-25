@@ -105,7 +105,7 @@ class MenuIslandButton(BaseWidget, can_focus=True):
         )
 
     @property
-    def value(self) -> str:
+    def value(self) -> object:
         return self._value
 
     @on(events.Enter)

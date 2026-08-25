@@ -3,7 +3,7 @@ from domain.use_cases.types.text_config import TextConfig
 from inbound.http.contracts.base import BaseResponse
 
 
-class TextConfigResponseContract(BaseResponse):
+class GetTextConfigResponseContract(BaseResponse):
     special_symbols: ConfigResponseContract[str]
     text_languages: ConfigResponseContract[str]
     time_limits: ConfigResponseContract[int]
@@ -14,8 +14,8 @@ class TextConfigResponseContract(BaseResponse):
         cls,
         *,
         data: TextConfig,
-    ) -> TextConfigResponseContract:
-        return TextConfigResponseContract(
+    ) -> GetTextConfigResponseContract:
+        return GetTextConfigResponseContract(
             **{
                 "special_symbols": cls._serialize_config(config=data.special_symbols),
                 "text_languages": cls._serialize_config(config=data.text_languages),

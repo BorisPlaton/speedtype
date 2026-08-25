@@ -1,19 +1,15 @@
 from abc import ABC, abstractmethod
 
-from pymongo import AsyncMongoClient
-
 from domain.entities.config import Config
 from domain.repository.config import ConfigRepository
+from infrastructure.repository.base import BaseMongoDBRepository
 
 
-class ConfigMongoDBRepository[Entity: Config](ConfigRepository[Entity], ABC):
-    def __init__(
-        self,
-        *,
-        mongo_client: AsyncMongoClient,
-    ) -> None:
-        self._collection = mongo_client.get_default_database()[self.collection_name]
-
+class ConfigMongoDBRepository[Entity: Config](
+    ConfigRepository[Entity],
+    BaseMongoDBRepository,
+    ABC,
+):
     async def get(self) -> Entity | None:
         result = await self._collection.find_one()
 
@@ -33,10 +29,6 @@ class ConfigMongoDBRepository[Entity: Config](ConfigRepository[Entity], ABC):
             replacement=data,
             upsert=True,
         )
-
-    @property
-    @abstractmethod
-    def collection_name(self) -> str: ...
 
     @abstractmethod
     def _to_json(
