@@ -22,7 +22,7 @@ class WordsMongoDBRepository(BaseMongoDBRepository, WordsRepository):
     ) -> None:
         operations = [
             UpdateOne(
-                {"word": entry.value},
+                {"word": entry.value, "word_length": entry.word_length_value},
                 {"$set": self._to_json(entity=entry)},
                 upsert=True,
             )
