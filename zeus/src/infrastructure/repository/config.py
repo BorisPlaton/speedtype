@@ -11,7 +11,7 @@ class ConfigMongoDBRepository[Entity: Config](
     ABC,
 ):
     async def get(self) -> Entity | None:
-        result = await self._collection.find_one()
+        result = await self._collection.find_one({"config_name": self._config_class.name})
 
         if not result:
             return None
@@ -25,10 +25,14 @@ class ConfigMongoDBRepository[Entity: Config](
     ) -> None:
         data = self._to_json(entity=config)
         await self._collection.replace_one(
-            filter={},
+            filter={"config_name": self._config_class.name},
             replacement=data,
             upsert=True,
         )
+
+    @property
+    def _collection_name(self) -> str:
+        return "text_config"
 
     @abstractmethod
     def _to_json(
@@ -43,3 +47,7 @@ class ConfigMongoDBRepository[Entity: Config](
         *,
         data: dict[str, object],
     ) -> Entity: ...
+
+    @property
+    @abstractmethod
+    def _config_class(self) -> type[Entity]: ...

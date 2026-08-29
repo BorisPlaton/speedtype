@@ -1,5 +1,5 @@
 [project]
-name = "speedtype"
+name = "zeus"
 version = "0.1.0"
 description = "."
 readme = "README.md"
@@ -36,7 +36,7 @@ extend-exclude = [
 src = ["src"]
 
 [tool.ruff.lint]
-ignore = ["ANN002", "ANN003", "COM812", "N818"]
+ignore = ["ANN002", "ANN003", "COM812", "N818", ]
 preview = true
 select = [
     "ANN",

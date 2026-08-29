@@ -7,7 +7,7 @@ from domain.repository.config import (
     TextLanguagesConfigRepository,
     WordsLengthConfigRepository,
 )
-from domain.repository.special_symbol import SpecialSymbolsRepository
+from domain.repository.special_symbols import SpecialSymbolsRepository
 from domain.repository.word import WordsRepository
 from domain.use_cases.base import UseCase
 from domain.use_cases.types.text_words import TextWords

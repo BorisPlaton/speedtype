@@ -3,7 +3,7 @@ from typing import TypedDict
 from pymongo import UpdateOne
 
 from domain.entities.special_symbol import SpecialSymbol
-from domain.repository.special_symbol import SpecialSymbolsRepository
+from domain.repository.special_symbols import SpecialSymbolsRepository
 from domain.value_objects.special_symbol_type import SpecialSymbolType
 from infrastructure.repository.base import BaseMongoDBRepository
 
@@ -20,7 +20,7 @@ class SpecialSymbolsMongoDBRepository(BaseMongoDBRepository, SpecialSymbolsRepos
     ) -> None:
         operations = [
             UpdateOne(
-                {"value": entry.special_symbol_type},
+                {"value": entry.value},
                 {"$set": self._to_json(entity=entry)},
                 upsert=True,
             )

@@ -7,15 +7,12 @@ from infrastructure.repository.config import ConfigMongoDBRepository
 
 class TimeLimitsConfigMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
     class TimeLimitsRecord(TypedDict):
+        config_name: str
         options: list[TimeLimitsConfigMongoDBRepository.TimeLimitsRecordOption]
 
     class TimeLimitsRecordOption(TypedDict):
         value: int
         is_default: bool
-
-    @property
-    def _collection_name(self) -> str:
-        return "time_limits"
 
     def _to_json(
         self,
@@ -23,6 +20,7 @@ class TimeLimitsConfigMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
         entity: TimeLimits,
     ) -> TimeLimitsRecord:
         return {
+            "config_name": TimeLimits.name,
             "options": [
                 {
                     "value": option.value,
@@ -46,3 +44,7 @@ class TimeLimitsConfigMongoDBRepository(ConfigMongoDBRepository[TimeLimits]):
                 for option in data["options"]
             ]
         )
+
+    @property
+    def _config_class(self) -> type[TimeLimits]:
+        return TimeLimits

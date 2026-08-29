@@ -7,6 +7,7 @@ from infrastructure.repository.config import ConfigMongoDBRepository
 
 class WordsLengthConfigMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
     class WordsLengthRecord(TypedDict):
+        config_name: str
         options: list[WordsLengthConfigMongoDBRepository.WordsLengthRecordOption]
 
     class WordsLengthRecordOption(TypedDict):
@@ -14,12 +15,9 @@ class WordsLengthConfigMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
         value: str
         is_default: bool
 
-    @property
-    def _collection_name(self) -> str:
-        return "words_length"
-
     def _to_json(self, *, entity: WordsLength) -> WordsLengthRecord:
         return {
+            "config_name": WordsLength.name,
             "options": [
                 {
                     "title": option.title,
@@ -41,3 +39,7 @@ class WordsLengthConfigMongoDBRepository(ConfigMongoDBRepository[WordsLength]):
                 for option in data["options"]
             ]
         )
+
+    @property
+    def _config_class(self) -> type[WordsLength]:
+        return WordsLength

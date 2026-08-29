@@ -22,32 +22,32 @@ format:
     ruff check --fix
 
 # Start zeus and all corresponding services.
-[env("ENV_FILE", env_file)]
 [env("COMPOSE_ENV_FILES", env_file)]
+[env("ENV_FILE", env_file)]
 zeus-up:
     docker compose up --build --watch
 
 # Stops zeus and all corresponding services.
-[env("ENV_FILE", env_file)]
 [env("COMPOSE_ENV_FILES", env_file)]
+[env("ENV_FILE", env_file)]
 zeus-down:
     docker compose down -t 5
 
 # Enters zeus shell.
-[env("ENV_FILE", env_file)]
 [env("COMPOSE_ENV_FILES", env_file)]
+[env("ENV_FILE", env_file)]
 zeus-sh:
     docker compose exec backend-app sh
 
 # Run all existing zeus migrations.
-[env("ENV_FILE", env_file)]
 [env("COMPOSE_ENV_FILES", env_file)]
-run-migrations:
+[env("ENV_FILE", env_file)]
+migrate:
     docker compose exec backend-app python /app/src/inbound/cli migrate
 
 # Connects to running MongoDB instance.
-[env("ENV_FILE", env_file)]
 [env("COMPOSE_ENV_FILES", env_file)]
+[env("ENV_FILE", env_file)]
 mongodb-connect:
     docker compose exec mongodb mongosh \
         --username "${MONGO_USERNAME}" \

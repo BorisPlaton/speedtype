@@ -1,0 +1,86 @@
+{
+  "special_symbols": {
+    "name": "Special Symbols",
+    "options": [
+      {
+        "value": "special_symbols",
+        "title": "SPECIAL SYMBOLS",
+        "is_default": false
+      },
+      {
+        "value": "punctuation",
+        "title": "PUNCTUATION",
+        "is_default": false
+      }
+    ],
+    "is_required": false
+  },
+  "text_languages": {
+    "name": "Languages",
+    "options": [
+      {
+        "value": "en",
+        "title": "ENGLISH",
+        "is_default": true
+      },
+      {
+        "value": "ua",
+        "title": "UKRAINIAN",
+        "is_default": false
+      },
+      {
+        "value": "ru",
+        "title": "RUSSIAN",
+        "is_default": false
+      }
+    ],
+    "is_required": true
+  },
+  "time_limits": {
+    "name": "Time",
+    "options": [
+      {
+        "value": 15,
+        "title": "15",
+        "is_default": true
+      },
+      {
+        "value": 30,
+        "title": "30",
+        "is_default": false
+      },
+      {
+        "value": 60,
+        "title": "60",
+        "is_default": false
+      },
+      {
+        "value": 90,
+        "title": "90",
+        "is_default": false
+      }
+    ],
+    "is_required": true
+  },
+  "words_length": {
+    "name": "Words Length",
+    "options": [
+      {
+        "value": "short",
+        "title": "SHORT",
+        "is_default": false
+      },
+      {
+        "value": "regular",
+        "title": "REGULAR",
+        "is_default": true
+      },
+      {
+        "value": "long",
+        "title": "LONG",
+        "is_default": false
+      }
+    ],
+    "is_required": true
+  }
+}

@@ -1,13 +1,36 @@
+from pydantic import Field
+
 from domain.entities.config import Config
 from domain.use_cases.types.text_config import TextConfig
 from inbound.http.contracts.base import BaseResponse
+from inbound.http.utils import load_example
 
 
 class GetTextConfigResponseContract(BaseResponse):
-    special_symbols: ConfigResponseContract[str]
-    text_languages: ConfigResponseContract[str]
-    time_limits: ConfigResponseContract[int]
-    words_length: ConfigResponseContract[str]
+    """
+    The text configuration the user can use to customize the input text.
+    """
+
+    special_symbols: ConfigResponseContract[str] = Field(
+        description="Special symbol types, that will be mixed with regular words.",
+    )
+    text_languages: ConfigResponseContract[str] = Field(
+        description="Languages, in which user can type words.",
+    )
+    time_limits: ConfigResponseContract[int] = Field(
+        description="Time of the single typing session.",
+    )
+    words_length: ConfigResponseContract[str] = Field(
+        description="Words' length that will appear in the input text.",
+    )
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                load_example(name="get_text_config_response.json"),
+            ]
+        }
+    }
 
     @classmethod
     def from_use_case(
@@ -45,12 +68,32 @@ class GetTextConfigResponseContract(BaseResponse):
 
 
 class ConfigResponseContract[OptionValue](BaseResponse):
-    name: str
-    options: list[ConfigOptionResponseContract[OptionValue]]
-    is_required: bool
+    """
+    Specific configuration details.
+    """
+
+    name: str = Field(
+        description="The human-readable name of the configuration.",
+    )
+    options: list[ConfigOptionResponseContract[OptionValue]] = Field(
+        description="The available options for this configuration.",
+    )
+    is_required: bool = Field(
+        description="Flag that indicates whether one of the configuration options has to be selected by the user.",
+    )
 
 
 class ConfigOptionResponseContract[Value](BaseResponse):
-    value: Value
-    title: str
-    is_default: bool
+    """
+    Option details of the specific configuration.
+    """
+
+    value: Value = Field(
+        description="The actual value of the option. Should be used when referencing this option.",
+    )
+    title: str = Field(
+        description="The human-readable name of the option.",
+    )
+    is_default: bool = Field(
+        description="Is this option selected by default or not.",
+    )

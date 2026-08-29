@@ -8,9 +8,9 @@ from domain.repository.config import (
     TimeLimitsConfigRepository,
     WordsLengthConfigRepository,
 )
-from domain.repository.special_symbol import SpecialSymbolsRepository
+from domain.repository.special_symbols import SpecialSymbolsRepository
 from domain.repository.word import WordsRepository
-from infrastructure.repository.special_symbol import SpecialSymbolsMongoDBRepository
+from infrastructure.repository.special_symbols import SpecialSymbolsMongoDBRepository
 from infrastructure.repository.special_symbols_config import SpecialSymbolsConfigMongoDBRepository
 from infrastructure.repository.text_languages_config import TextLanguagesConfigMongoDBRepository
 from infrastructure.repository.time_limits_config import TimeLimitsConfigMongoDBRepository
@@ -23,7 +23,7 @@ class InfrastructureContainer(DeclarativeContainer):
 
     mongo_client: Provider[AsyncMongoClient] = Singleton(
         AsyncMongoClient,
-        host=config.mongodb.uri,
+        host=config.mongodb.URI,
         username=config.mongodb.USERNAME,
         password=config.mongodb.PASSWORD,
         timeoutMS=config.mongodb.TIMEOUT,

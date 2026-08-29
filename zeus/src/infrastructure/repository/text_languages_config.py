@@ -7,6 +7,7 @@ from infrastructure.repository.config import ConfigMongoDBRepository
 
 class TextLanguagesConfigMongoDBRepository(ConfigMongoDBRepository[TextLanguages]):
     class TextLanguagesRecord(TypedDict):
+        config_name: str
         options: list[TextLanguagesConfigMongoDBRepository.TextLanguagesRecordOption]
 
     class TextLanguagesRecordOption(TypedDict):
@@ -14,16 +15,13 @@ class TextLanguagesConfigMongoDBRepository(ConfigMongoDBRepository[TextLanguages
         value: str
         is_default: bool
 
-    @property
-    def _collection_name(self) -> str:
-        return "text_languages"
-
     def _to_json(
         self,
         *,
         entity: TextLanguages,
     ) -> TextLanguagesRecord:
         return {
+            "config_name": TextLanguages.name,
             "options": [
                 {
                     "title": option.title,
@@ -49,3 +47,7 @@ class TextLanguagesConfigMongoDBRepository(ConfigMongoDBRepository[TextLanguages
                 for option in data["options"]
             ]
         )
+
+    @property
+    def _config_class(self) -> type[TextLanguages]:
+        return TextLanguages

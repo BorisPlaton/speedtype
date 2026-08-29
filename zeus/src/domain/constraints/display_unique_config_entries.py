@@ -1,5 +1,3 @@
-from funcy import first
-
 from domain.constraints.base import Constraint
 from domain.exceptions.constraint.display_unique import ItemDisplayTextMustBeUnique, ItemValueMustBeUnique
 from domain.value_objects.base import ConfigEntry
@@ -10,9 +8,10 @@ class DisplayUniqueConfigEntriesConstraint(Constraint):
         self,
         *,
         items: list[ConfigEntry],
+        name: str,
     ) -> None:
         self._items = items
-        self._name = first(items).name
+        self._name = name
 
     def check(self) -> None:
         items_amount = len(self._items)
