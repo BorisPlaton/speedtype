@@ -7,6 +7,7 @@ from infrastructure.repository.config import ConfigMongoDBRepository
 
 class SpecialSymbolsConfigMongoDBRepository(ConfigMongoDBRepository[SpecialSymbols]):
     class SpecialSymbolsRecord(TypedDict):
+        config_name: str
         options: list[SpecialSymbolsConfigMongoDBRepository.SpecialSymbolRecordOption]
 
     class SpecialSymbolRecordOption(TypedDict):
@@ -14,16 +15,13 @@ class SpecialSymbolsConfigMongoDBRepository(ConfigMongoDBRepository[SpecialSymbo
         value: str
         is_default: bool
 
-    @property
-    def _collection_name(self) -> str:
-        return "special_symbols"
-
     def _to_json(
         self,
         *,
         entity: SpecialSymbols,
     ) -> SpecialSymbolsRecord:
         return {
+            "config_name": SpecialSymbols.name,
             "options": [
                 {
                     "title": option.title,
@@ -49,3 +47,7 @@ class SpecialSymbolsConfigMongoDBRepository(ConfigMongoDBRepository[SpecialSymbo
                 for option in data["options"]
             ]
         )
+
+    @property
+    def _config_class(self) -> type[SpecialSymbols]:
+        return SpecialSymbols

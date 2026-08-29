@@ -28,17 +28,17 @@ TIME_LIMITS = [
 WORDS_LENGTH = [
     {
         "is_default": False,
-        "value": "short",
+        "code": "short",
         "title": "SHORT",
     },
     {
         "is_default": True,
-        "value": "regular",
+        "code": "regular",
         "title": "REGULAR",
     },
     {
         "is_default": False,
-        "value": "long",
+        "code": "long",
         "title": "LONG",
     },
 ]

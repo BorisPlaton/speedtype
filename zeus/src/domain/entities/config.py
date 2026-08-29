@@ -30,7 +30,10 @@ class Config[Option: ConfigEntry[object]](ABC):
             exact_one=cls.is_required,
             name=cls.name,
         ).check()
-        DisplayUniqueConfigEntriesConstraint(items=options).check()
+        DisplayUniqueConfigEntriesConstraint(
+            items=options,
+            name=cls.name,
+        ).check()
         return cls(options=options)
 
     def get_option(
