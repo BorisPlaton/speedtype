@@ -41,6 +41,9 @@ class SpecialSymbolsMongoDBRepository(BaseMongoDBRepository, SpecialSymbolsRepos
 
         return [self._from_json(data=record) for record in special_symbols]
 
+    async def delete_all(self) -> None:
+        await self._collection.delete_many({})
+
     @staticmethod
     def _to_json(
         *,

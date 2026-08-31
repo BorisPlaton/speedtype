@@ -1,0 +1,11 @@
+# serializer version: 1
+# name: test_internal_server_error
+  dict({
+    'detail': 'Something went wrong...',
+  })
+# ---
+# name: test_non_existing_endpoint
+  dict({
+    'detail': 'Not Found',
+  })
+# ---

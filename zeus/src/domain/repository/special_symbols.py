@@ -18,3 +18,6 @@ class SpecialSymbolsRepository(ABC):
         *,
         special_symbol_types: list[SpecialSymbolType],
     ) -> list[SpecialSymbol]: ...
+
+    @abstractmethod
+    async def delete_all(self) -> None: ...

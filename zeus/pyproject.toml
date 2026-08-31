@@ -20,9 +20,15 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "httpx2>=2.12.0",
     "ipython>=9.12.0",
     "pre-commit>=4.5.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
     "ruff>=0.15.11",
+    "syrupy>=6.0.0",
+    "testcontainers[mongodb]>=4.15.0",
 ]
 
 [tool.ruff]
@@ -74,3 +80,32 @@ docstring-code-format = false
 
 [tool.black]
 line-length = 120
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+asyncio_mode = "auto"
+addopts = "--cov=src --no-cov-on-fail -x"
+testpaths = [
+    "src/tests",
+]
+pythonpath = [
+    "src",
+]
+
+[tool.coverage.run]
+omit = [
+    ".venv/*",
+    "src/tests/*",
+    "*__init__.py",
+    "src/infrastructure/containers/*",
+    "src/inbound/**/__main__.py",
+]
+disable_warnings = ["couldnt-parse"]
+
+[tool.coverage.report]
+skip_empty = true
+skip_covered = true
+
+[tool.coverage.html]
+directory = "src/tests/coverage"

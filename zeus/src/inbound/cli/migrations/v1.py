@@ -108,3 +108,9 @@ class MigrationV1(Migration):
                 options=[SpecialSymbolType.new(**special_symbol) for special_symbol in SPECIAL_SYMBOLS]
             )
             await self._special_symbols_repository.upsert(config=special_symbols_config)
+
+    async def rollback(self) -> None:
+        await self._time_limits_repository.delete()
+        await self._words_length_repository.delete()
+        await self._text_languages_repository.delete()
+        await self._special_symbols_repository.delete()

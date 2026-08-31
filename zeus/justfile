@@ -3,7 +3,7 @@ env_file := "./envs/.env.local"
 set dotenv-path := env_file
 set dotenv-load
 
-# Displays available commands.
+# Display available commands.
 help:
     @just --list
 
@@ -21,19 +21,27 @@ format:
     ruff format
     ruff check --fix
 
+# Run all existing tests.
+tests:
+    pytest -vv
+
+# Update snapshots for tests.
+tests-snapshot-update:
+    pytest --snapshot-update -vv
+
 # Start zeus and all corresponding services.
 [env("COMPOSE_ENV_FILES", env_file)]
 [env("ENV_FILE", env_file)]
 zeus-up:
     docker compose up --build --watch
 
-# Stops zeus and all corresponding services.
+# Stop zeus and all corresponding services.
 [env("COMPOSE_ENV_FILES", env_file)]
 [env("ENV_FILE", env_file)]
 zeus-down:
     docker compose down -t 5
 
-# Enters zeus shell.
+# Enter zeus shell.
 [env("COMPOSE_ENV_FILES", env_file)]
 [env("ENV_FILE", env_file)]
 zeus-sh:
@@ -45,7 +53,7 @@ zeus-sh:
 migrate:
     docker compose exec backend-app python /app/src/inbound/cli migrate
 
-# Connects to running MongoDB instance.
+# Connect to the running MongoDB instance.
 [env("COMPOSE_ENV_FILES", env_file)]
 [env("ENV_FILE", env_file)]
 mongodb-connect:

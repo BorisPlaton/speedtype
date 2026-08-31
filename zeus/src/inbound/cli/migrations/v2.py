@@ -5348,3 +5348,7 @@ class MigrationV2(Migration):
                     for symbol in symbols
                 ]
             )
+
+    async def rollback(self) -> None:
+        await self._words_repository.delete_all()
+        await self._special_symbols_repository.delete_all()

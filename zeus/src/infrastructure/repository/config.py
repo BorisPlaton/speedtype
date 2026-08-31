@@ -30,6 +30,9 @@ class ConfigMongoDBRepository[Entity: Config](
             upsert=True,
         )
 
+    async def delete(self) -> None:
+        await self._collection.delete_one({"config_name": self._config_class.name})
+
     @property
     def _collection_name(self) -> str:
         return "text_config"

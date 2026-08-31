@@ -37,7 +37,7 @@ class MongoDBSettings(BaseSettings):
     @computed_field
     @property
     def URI(self) -> str:  # noqa: N802
-        return f"mongodb://{self.HOST}:{self.PORT}/{self.DATABASE_NAME}"
+        return f"mongodb://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DATABASE_NAME}?authSource={self.AUTH_SOURCE}"
 
 
 class Settings(BaseSettings):

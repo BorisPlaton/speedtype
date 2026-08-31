@@ -24,10 +24,7 @@ class InfrastructureContainer(DeclarativeContainer):
     mongo_client: Provider[AsyncMongoClient] = Singleton(
         AsyncMongoClient,
         host=config.mongodb.URI,
-        username=config.mongodb.USERNAME,
-        password=config.mongodb.PASSWORD,
         timeoutMS=config.mongodb.TIMEOUT,
-        authSource=config.mongodb.AUTH_SOURCE,
     )
 
     special_symbols_config_repository: Provider[SpecialSymbolsConfigRepository] = Singleton(

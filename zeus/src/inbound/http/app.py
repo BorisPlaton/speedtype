@@ -1,14 +1,14 @@
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import JSONResponse
 
-from fastapi import FastAPI
-
+from domain.exceptions.base import DomainError
 from inbound.http.routes import router as text_router
 from infrastructure.containers.application import ApplicationContainer
-from infrastructure.settings import Settings
+from infrastructure.containers.utils import create_container
+from infrastructure.settings import ZeusSettings
 
 
-def create_app() -> FastAPI:
+def create_app(app_container: ApplicationContainer | None = None) -> FastAPI:
     description = """
     The `zeus` service is responsible for the text that the user inputs inside the `speedtype` application,
     as well as configuring the typing session.
@@ -17,21 +17,29 @@ def create_app() -> FastAPI:
     goal.
     """
 
-    @asynccontextmanager
-    async def lifespan(*_args, **_kwargs) -> AsyncIterator[None]:
-        app.state.container = container
-        yield
-
-    container = ApplicationContainer()
-    settings = Settings()
-    container.config.from_pydantic(settings)
+    container = app_container or create_container()
+    settings: ZeusSettings = container.config.zeus
 
     app = FastAPI(
-        title=settings.zeus.APP_NAME,
-        lifespan=lifespan,
+        title=settings.APP_NAME,
         description="\n".join(line.strip() for line in description.split("\n")),
-        version=settings.zeus.VERSION,
+        version=settings.VERSION,
+        container=container,
     )
     app.include_router(text_router)
+
+    @app.exception_handler(Exception)
+    def general_exception_handler(*_args, **_kwargs) -> Response:
+        return JSONResponse(
+            content={"detail": "Something went wrong..."},
+            status_code=500,
+        )
+
+    @app.exception_handler(DomainError)
+    def domain_error_handler(_request: Request, exc: DomainError) -> Response:
+        return JSONResponse(
+            content={"detail": str(exc)},
+            status_code=400,
+        )
 
     return app

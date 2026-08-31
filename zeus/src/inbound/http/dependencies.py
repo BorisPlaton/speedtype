@@ -4,4 +4,4 @@ from infrastructure.containers.domain import DomainContainer
 
 
 def get_domain_container(request: Request) -> DomainContainer:
-    return request.app.state.container.domain
+    return request.app.extra["container"].domain

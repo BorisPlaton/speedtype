@@ -3,7 +3,7 @@ from typing import Annotated
 from typer import Context, Exit, Option, Typer
 
 from inbound.cli.migrations.migrations_list import MIGRATIONS, MigrationID
-from inbound.cli.utils import async_cmd
+from inbound.cli.utils import async_command
 from infrastructure.containers.application import ApplicationContainer
 
 
@@ -11,7 +11,7 @@ app = Typer()
 
 
 @app.command()
-@async_cmd
+@async_command
 async def migrate(
     ctx: Context,
     migration_id: Annotated[

@@ -1,9 +1,6 @@
 from inbound.cli.app import CLIApp
-from infrastructure.containers.application import ApplicationContainer
-from infrastructure.settings import Settings
+from infrastructure.containers.utils import create_container
 
 
 if __name__ == "__main__":
-    container = ApplicationContainer()
-    container.config.from_pydantic(Settings(), required=True)
-    CLIApp(container=container).run()
+    CLIApp(container=create_container()).run()
