@@ -1,56 +1,43 @@
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
-from pymongo import AsyncMongoClient
 
 from infrastructure.containers.application import ApplicationContainer
 from infrastructure.migrations.migrations_list import MigrationID
 
 
-async def test_migrate_command_run_all_migrations(
+async def test_migration_runner_execute_all_migrations(
     container: ApplicationContainer,
-    clean_mongodb: None,  # noqa: ARG001
 ) -> None:
-    runner = container.infra.migrations_runner()
+    migrations_repository = MagicMock()
 
-    # ruff: disable[SLF001]
-    mongo_client: AsyncMongoClient = container.infra.mongo_client()
-    words_collection = container.infra.words_repository()._collection_name
-    special_symbols_collection = container.infra.special_symbols_repository()._collection_name
-    text_config_collection = container.infra.text_languages_config_repository()._collection_name
-    # ruff: enable[SLF001]
+    with container.infra.override_providers(migrations_repository=migrations_repository):
+        migration = AsyncMock()
+        migrations_repository.get_all.return_value = [migration]
+        runner = container.infra.migrations_runner()
 
-    assert not await mongo_client.get_default_database()[words_collection].find({}).to_list()
-    assert not await mongo_client.get_default_database()[special_symbols_collection].find({}).to_list()
-    assert not await mongo_client.get_default_database()[text_config_collection].find({}).to_list()
+        await runner.run()
 
-    await runner.run()
-
-    assert await mongo_client.get_default_database()[words_collection].find({}).to_list()
-    assert await mongo_client.get_default_database()[special_symbols_collection].find({}).to_list()
-    assert await mongo_client.get_default_database()[text_config_collection].find({}).to_list()
+        migrations_repository.get_all.assert_called_once()
+        migrations_repository.get_migration.assert_not_called()
+        migration.execute.assert_awaited_once()
 
 
-async def test_migrate_command_run_only_specified_migration(
+async def test_migration_runner_execute_specified_migration(
     container: ApplicationContainer,
-    clean_mongodb: None,  # noqa: ARG001
 ) -> None:
-    runner = container.infra.migrations_runner()
+    migrations_repository = MagicMock()
 
-    # ruff: disable[SLF001]
-    mongo_client: AsyncMongoClient = container.infra.mongo_client()
-    words_collection = container.infra.words_repository()._collection_name
-    special_symbols_collection = container.infra.special_symbols_repository()._collection_name
-    text_config_collection = container.infra.text_languages_config_repository()._collection_name
-    # ruff: enable[SLF001]
+    with container.infra.override_providers(migrations_repository=migrations_repository):
+        migration = AsyncMock()
+        migrations_repository.get_migration.return_value = migration
+        runner = container.infra.migrations_runner()
 
-    assert not await mongo_client.get_default_database()[words_collection].find({}).to_list()
-    assert not await mongo_client.get_default_database()[special_symbols_collection].find({}).to_list()
-    assert not await mongo_client.get_default_database()[text_config_collection].find({}).to_list()
+        await runner.run(migration_id=MigrationID.V1)
 
-    await runner.run(migration_id=MigrationID.V1)
-
-    assert not await mongo_client.get_default_database()[words_collection].find({}).to_list()
-    assert not await mongo_client.get_default_database()[special_symbols_collection].find({}).to_list()
-    assert await mongo_client.get_default_database()[text_config_collection].find({}).to_list()
+        migrations_repository.get_all.assert_not_called()
+        migrations_repository.get_migration.assert_called_once()
+        migration.execute.assert_awaited_once()
 
 
 @pytest.mark.parametrize(
@@ -61,7 +48,7 @@ async def test_migrate_command_run_only_specified_migration(
         "v0",
     ],
 )
-async def test_migrate_command_fails_with_invalid_migration_id(
+async def test_migration_runner_fails_with_invalid_migration_id(
     migration_id: str,
     container: ApplicationContainer,
 ) -> None:

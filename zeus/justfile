@@ -22,8 +22,8 @@ format:
     ruff check --fix
 
 # Run all existing tests.
-tests:
-    pytest -vv
+tests path = ".":
+    pytest -vv {{ path }}
 
 # Update snapshots for tests.
 tests-snapshot-update:

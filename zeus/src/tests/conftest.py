@@ -1,5 +1,4 @@
 from collections.abc import Generator
-from typing import Any
 
 import pytest
 from testcontainers.community.mongodb import MongoDbContainer
@@ -9,7 +8,7 @@ from infrastructure.containers.utils import create_container
 
 
 @pytest.fixture(scope="session")
-def container() -> Generator[ApplicationContainer, Any, None]:
+def container() -> Generator[ApplicationContainer, None, None]:
     container = create_container()
 
     with (
@@ -26,3 +25,9 @@ def container() -> Generator[ApplicationContainer, Any, None]:
         container.config.zeus.DEBUG.override(False),
     ):
         yield container
+
+
+@pytest.fixture(autouse=True)
+def reset_container_singletons(container: ApplicationContainer) -> Generator[None, None, None]:
+    yield
+    container.reset_singletons()
