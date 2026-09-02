@@ -14,3 +14,13 @@ repos:
       - id: ruff-format
       - id: ruff-check
         args: [ --fix ]
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run tests
+        entry: cd zeus && just tests
+        language: system
+        pass_filenames: false
+        always_run: false
+        types: [ python ]
+        stages: [ pre-push ]

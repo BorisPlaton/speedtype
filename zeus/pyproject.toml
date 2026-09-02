@@ -97,8 +97,6 @@ pythonpath = [
 omit = [
     ".venv/*",
     "src/tests/*",
-    "*__init__.py",
-    "src/infrastructure/containers/*",
     "src/inbound/**/__main__.py",
 ]
 disable_warnings = ["couldnt-parse"]

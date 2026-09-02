@@ -17,7 +17,7 @@ async def apply_migrations(container: ApplicationContainer) -> AsyncGenerator[No
     await migrations_runner.rollback()
 
 
-@pytest_asyncio.fixture(loop_scope="session")
+@pytest_asyncio.fixture(loop_scope="package")
 async def zeus_client(container: ApplicationContainer) -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(
         transport=ASGITransport(

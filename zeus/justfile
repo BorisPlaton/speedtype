@@ -21,7 +21,7 @@ format:
     ruff format
     ruff check --fix
 
-# Run all existing tests.
+# Run zeus's tests. It is possible to specify a test path for the pytest.
 tests path = ".":
     pytest -vv {{ path }}
 
