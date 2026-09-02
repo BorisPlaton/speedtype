@@ -16,11 +16,11 @@ repos:
         args: [ --fix ]
   - repo: local
     hooks:
-      - id: pytest
-        name: Run tests
-        entry: cd zeus && just tests
+      - id: zeus tests
+        name: Run zeus tests
+        entry: just --justfile zeus/justfile tests
         language: system
         pass_filenames: false
-        always_run: false
+        always_run: true
         types: [ python ]
         stages: [ pre-push ]
