@@ -41,7 +41,7 @@ class Config[Option: ConfigEntry[object]](ABC):
         *,
         option: object,
     ) -> Option | None:
-        return next(filter(lambda x: x.value == option, self.options))
+        return next(filter(lambda x: x.value == option, self.options), None)
 
     @property
     def default_option(self) -> Option | None:

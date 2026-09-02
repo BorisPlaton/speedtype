@@ -10,6 +10,9 @@ class ConfigRepository[Entity: Config](ABC):
     @abstractmethod
     async def upsert(self, *, config: Entity) -> None: ...
 
+    @abstractmethod
+    async def delete(self) -> None: ...
+
 
 class TextLanguagesConfigRepository(ConfigRepository[TextLanguages], ABC):
     pass

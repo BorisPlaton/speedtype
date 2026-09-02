@@ -45,6 +45,9 @@ class WordsMongoDBRepository(BaseMongoDBRepository, WordsRepository):
 
         return [self._from_json(data=record) for record in words]
 
+    async def delete_all(self) -> None:
+        await self._collection.delete_many({})
+
     @staticmethod
     def _to_json(
         *,

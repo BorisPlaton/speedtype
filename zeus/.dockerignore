@@ -1,9 +1,13 @@
 .venv/
 .idea/
+.ruff_cache/
 __pycache__/
+envs/
+src/tests/
 
 .DS_Store
 .dockerignore
+.coverage
 docker-compose.yaml
 Dockerfile
 justfile

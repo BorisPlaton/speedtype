@@ -1,0 +1,89 @@
+# serializer version: 1
+# name: test_endpoint_returns_config
+  dict({
+    'special_symbols': dict({
+      'is_required': False,
+      'name': 'Special Symbols',
+      'options': list([
+        dict({
+          'is_default': False,
+          'title': 'SPECIAL SYMBOLS',
+          'value': 'special_symbols',
+        }),
+        dict({
+          'is_default': False,
+          'title': 'PUNCTUATION',
+          'value': 'punctuation',
+        }),
+      ]),
+    }),
+    'text_languages': dict({
+      'is_required': True,
+      'name': 'Languages',
+      'options': list([
+        dict({
+          'is_default': True,
+          'title': 'ENGLISH',
+          'value': 'en',
+        }),
+        dict({
+          'is_default': False,
+          'title': 'UKRAINIAN',
+          'value': 'ua',
+        }),
+        dict({
+          'is_default': False,
+          'title': 'RUSSIAN',
+          'value': 'ru',
+        }),
+      ]),
+    }),
+    'time_limits': dict({
+      'is_required': True,
+      'name': 'Time',
+      'options': list([
+        dict({
+          'is_default': True,
+          'title': '15',
+          'value': 15,
+        }),
+        dict({
+          'is_default': False,
+          'title': '30',
+          'value': 30,
+        }),
+        dict({
+          'is_default': False,
+          'title': '60',
+          'value': 60,
+        }),
+        dict({
+          'is_default': False,
+          'title': '90',
+          'value': 90,
+        }),
+      ]),
+    }),
+    'words_length': dict({
+      'is_required': True,
+      'name': 'Words Length',
+      'options': list([
+        dict({
+          'is_default': False,
+          'title': 'SHORT',
+          'value': 'short',
+        }),
+        dict({
+          'is_default': True,
+          'title': 'REGULAR',
+          'value': 'regular',
+        }),
+        dict({
+          'is_default': False,
+          'title': 'LONG',
+          'value': 'long',
+        }),
+      ]),
+    }),
+  })
+# ---

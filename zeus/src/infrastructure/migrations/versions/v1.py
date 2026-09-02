@@ -1,10 +1,15 @@
 from domain.entities.config import SpecialSymbols, TextLanguages, TimeLimits, WordsLength
+from domain.repository.config import (
+    SpecialSymbolsConfigRepository,
+    TextLanguagesConfigRepository,
+    TimeLimitsConfigRepository,
+    WordsLengthConfigRepository,
+)
 from domain.value_objects.input_time_option import InputTimeOption
 from domain.value_objects.language_option import LanguageOption
 from domain.value_objects.special_symbol_type import SpecialSymbolType
 from domain.value_objects.word_length_option import WordLengthOption
-from inbound.cli.migrations.base import Migration
-from infrastructure.containers.application import ApplicationContainer
+from infrastructure.migrations.base import Migration
 
 
 TIME_LIMITS = [
@@ -77,34 +82,43 @@ class MigrationV1(Migration):
     def __init__(
         self,
         *,
-        container: ApplicationContainer,
+        time_limits_config_repository: TimeLimitsConfigRepository,
+        words_length_config_repository: WordsLengthConfigRepository,
+        text_languages_config_repository: TextLanguagesConfigRepository,
+        special_symbols_config_repository: SpecialSymbolsConfigRepository,
     ) -> None:
-        self._time_limits_repository = container.infra.time_limits_repository()
-        self._words_length_repository = container.infra.words_length_config_repository()
-        self._text_languages_repository = container.infra.text_languages_config_repository()
-        self._special_symbols_repository = container.infra.special_symbols_config_repository()
+        self._time_limits_config_repository = time_limits_config_repository
+        self._words_length_config_repository = words_length_config_repository
+        self._text_languages_config_repository = text_languages_config_repository
+        self._special_symbols_config_repository = special_symbols_config_repository
 
     async def execute(self) -> None:
-        if not await self._time_limits_repository.get():
+        if not await self._time_limits_config_repository.get():
             time_limits_config = TimeLimits.new(
                 options=[InputTimeOption.new(**input_time) for input_time in TIME_LIMITS]
             )
-            await self._time_limits_repository.upsert(config=time_limits_config)
+            await self._time_limits_config_repository.upsert(config=time_limits_config)
 
-        if not await self._words_length_repository.get():
+        if not await self._words_length_config_repository.get():
             words_length_config = WordsLength.new(
                 options=[WordLengthOption.new(**word_length) for word_length in WORDS_LENGTH]
             )
-            await self._words_length_repository.upsert(config=words_length_config)
+            await self._words_length_config_repository.upsert(config=words_length_config)
 
-        if not await self._text_languages_repository.get():
+        if not await self._text_languages_config_repository.get():
             text_languages_config = TextLanguages.new(
                 options=[LanguageOption.new(**text_language) for text_language in TEXT_LANGUAGES]
             )
-            await self._text_languages_repository.upsert(config=text_languages_config)
+            await self._text_languages_config_repository.upsert(config=text_languages_config)
 
-        if not await self._special_symbols_repository.get():
+        if not await self._special_symbols_config_repository.get():
             special_symbols_config = SpecialSymbols.new(
                 options=[SpecialSymbolType.new(**special_symbol) for special_symbol in SPECIAL_SYMBOLS]
             )
-            await self._special_symbols_repository.upsert(config=special_symbols_config)
+            await self._special_symbols_config_repository.upsert(config=special_symbols_config)
+
+    async def rollback(self) -> None:
+        await self._time_limits_config_repository.delete()
+        await self._words_length_config_repository.delete()
+        await self._text_languages_config_repository.delete()
+        await self._special_symbols_config_repository.delete()

@@ -16,3 +16,6 @@ class WordsRepository(ABC):
         language: LanguageOption,
         word_length: WordLengthOption,
     ) -> list[Word]: ...
+
+    @abstractmethod
+    async def delete_all(self) -> None: ...

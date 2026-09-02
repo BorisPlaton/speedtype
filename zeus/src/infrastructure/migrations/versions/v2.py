@@ -1,7 +1,13 @@
 from domain.entities.special_symbol import SpecialSymbol
 from domain.entities.word import Word
-from inbound.cli.migrations.base import Migration
-from infrastructure.containers.application import ApplicationContainer
+from domain.repository.config import (
+    SpecialSymbolsConfigRepository,
+    TextLanguagesConfigRepository,
+    WordsLengthConfigRepository,
+)
+from domain.repository.special_symbols import SpecialSymbolsRepository
+from domain.repository.word import WordsRepository
+from infrastructure.migrations.base import Migration
 
 
 WORDS_COMBINATIONS = {
@@ -5309,18 +5315,22 @@ class MigrationV2(Migration):
     def __init__(
         self,
         *,
-        container: ApplicationContainer,
+        words_length_config_repository: WordsLengthConfigRepository,
+        text_languages_config_repository: TextLanguagesConfigRepository,
+        special_symbols_config_repository: SpecialSymbolsConfigRepository,
+        words_repository: WordsRepository,
+        special_symbols_repository: SpecialSymbolsRepository,
     ) -> None:
-        self._words_length_config_repo = container.infra.words_length_config_repository()
-        self._text_languages_config_repo = container.infra.text_languages_config_repository()
-        self._special_symbols_config_repo = container.infra.special_symbols_config_repository()
-        self._words_repository = container.infra.words_repository()
-        self._special_symbols_repository = container.infra.special_symbols_repository()
+        self._words_length_config_repository = words_length_config_repository
+        self._text_languages_config_repository = text_languages_config_repository
+        self._special_symbols_config_repository = special_symbols_config_repository
+        self._words_repository = words_repository
+        self._special_symbols_repository = special_symbols_repository
 
     async def execute(self) -> None:
-        words_length_config = await self._words_length_config_repo.get()
-        text_languages_config = await self._text_languages_config_repo.get()
-        special_symbols_config = await self._special_symbols_config_repo.get()
+        words_length_config = await self._words_length_config_repository.get()
+        text_languages_config = await self._text_languages_config_repository.get()
+        special_symbols_config = await self._special_symbols_config_repository.get()
 
         for language, words_by_length_map in WORDS_COMBINATIONS.items():
             for word_length, words_list in words_by_length_map.items():
@@ -5348,3 +5358,7 @@ class MigrationV2(Migration):
                     for symbol in symbols
                 ]
             )
+
+    async def rollback(self) -> None:
+        await self._words_repository.delete_all()
+        await self._special_symbols_repository.delete_all()

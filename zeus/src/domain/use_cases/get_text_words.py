@@ -1,6 +1,6 @@
 import asyncio
 
-from domain.entities.config import TextLanguages, WordsLength
+from domain.entities.config import SpecialSymbols, TextLanguages, WordsLength
 from domain.exceptions.config_option_doesnt_exist import ConfigOptionDoesntExist
 from domain.repository.config import (
     SpecialSymbolsConfigRepository,
@@ -67,10 +67,18 @@ class GetTextWords(UseCase[TextWords]):
             )
 
         special_symbols_config = await self._special_symbols_config_repository.get()
+
+        special_symbol_options = []
+        for symbol_type in special_symbol_types:
+            if not (special_symbol_option := special_symbols_config.get_option(option=symbol_type)):
+                raise ConfigOptionDoesntExist(
+                    config_name=SpecialSymbols.name,
+                    non_existed_option=symbol_type,
+                )
+            special_symbol_options.append(special_symbol_option)
+
         special_symbols = await self._special_symbols_repository.get_by_types(
-            special_symbol_types=[
-                special_symbols_config.get_option(option=symbol_type) for symbol_type in special_symbol_types
-            ]
+            special_symbol_types=special_symbol_options,
         )
 
         return TextWords(

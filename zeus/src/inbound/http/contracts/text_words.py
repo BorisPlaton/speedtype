@@ -2,7 +2,7 @@ from pydantic import Field
 
 from domain.use_cases.types.text_words import TextWords
 from inbound.http.contracts.base import BaseRequest, BaseResponse
-from inbound.http.utils import load_example
+from inbound.http.contracts.utils import load_example
 
 
 class GetTextWordsRequestContract(BaseRequest):

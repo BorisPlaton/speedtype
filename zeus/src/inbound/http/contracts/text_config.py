@@ -3,7 +3,7 @@ from pydantic import Field
 from domain.entities.config import Config
 from domain.use_cases.types.text_config import TextConfig
 from inbound.http.contracts.base import BaseResponse
-from inbound.http.utils import load_example
+from inbound.http.contracts.utils import load_example
 
 
 class GetTextConfigResponseContract(BaseResponse):
