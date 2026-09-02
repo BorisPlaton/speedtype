@@ -19,7 +19,7 @@ repos:
   - repo: local
     hooks:
       - id: zeus tests
-        name: Run zeus tests
+        name: zeus tests
         entry: just --justfile zeus/justfile tests
         language: system
         pass_filenames: false
