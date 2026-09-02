@@ -8,7 +8,7 @@ from infrastructure.containers.utils import create_container
 from infrastructure.settings import ZeusSettings
 
 
-def create_app(app_container: ApplicationContainer | None = None) -> FastAPI:
+def create_app(*, container: ApplicationContainer | None = None) -> FastAPI:
     description = """
     The `zeus` service is responsible for the text that the user inputs inside the `speedtype` application,
     as well as configuring the typing session.
@@ -17,7 +17,7 @@ def create_app(app_container: ApplicationContainer | None = None) -> FastAPI:
     goal.
     """
 
-    container = app_container or create_container()
+    container = container or create_container()
     settings: ZeusSettings = container.config.zeus
 
     app = FastAPI(

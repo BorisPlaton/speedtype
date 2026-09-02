@@ -10,6 +10,10 @@ from domain.repository.config import (
 )
 from domain.repository.special_symbols import SpecialSymbolsRepository
 from domain.repository.word import WordsRepository
+from infrastructure.migrations.runner import MigrationRunner
+from infrastructure.migrations.versions.v1 import MigrationV1
+from infrastructure.migrations.versions.v2 import MigrationV2
+from infrastructure.repository.migrations import MigrationsRepository
 from infrastructure.repository.special_symbols import SpecialSymbolsMongoDBRepository
 from infrastructure.repository.special_symbols_config import SpecialSymbolsConfigMongoDBRepository
 from infrastructure.repository.text_languages_config import TextLanguagesConfigMongoDBRepository
@@ -35,7 +39,7 @@ class InfrastructureContainer(DeclarativeContainer):
         TextLanguagesConfigMongoDBRepository,
         mongo_client=mongo_client,
     )
-    time_limits_repository: Provider[TimeLimitsConfigRepository] = Singleton(
+    time_limits_config_repository: Provider[TimeLimitsConfigRepository] = Singleton(
         TimeLimitsConfigMongoDBRepository,
         mongo_client=mongo_client,
     )
@@ -50,4 +54,29 @@ class InfrastructureContainer(DeclarativeContainer):
     special_symbols_repository: Provider[SpecialSymbolsRepository] = Singleton(
         SpecialSymbolsMongoDBRepository,
         mongo_client=mongo_client,
+    )
+
+    migration_v1: Provider[MigrationV1] = Singleton(
+        MigrationV1,
+        time_limits_config_repository=time_limits_config_repository,
+        words_length_config_repository=words_length_config_repository,
+        text_languages_config_repository=text_languages_config_repository,
+        special_symbols_config_repository=special_symbols_config_repository,
+    )
+    migration_v2: Provider[MigrationV2] = Singleton(
+        MigrationV2,
+        words_length_config_repository=words_length_config_repository,
+        text_languages_config_repository=text_languages_config_repository,
+        special_symbols_config_repository=special_symbols_config_repository,
+        words_repository=words_repository,
+        special_symbols_repository=special_symbols_repository,
+    )
+    migrations_repository: Provider[MigrationsRepository] = Singleton(
+        MigrationsRepository,
+        migration_v1=migration_v1,
+        migration_v2=migration_v2,
+    )
+    migrations_runner: Provider[MigrationRunner] = Singleton(
+        MigrationRunner,
+        migrations_repository=migrations_repository,
     )

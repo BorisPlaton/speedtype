@@ -1,6 +1,6 @@
-from inbound.cli.app import CLIApp
-from infrastructure.containers.utils import create_container
+from inbound.cli.app import create_cli_app
 
 
 if __name__ == "__main__":
-    CLIApp(container=create_container()).run()
+    app = create_cli_app()
+    app()

@@ -2,9 +2,9 @@ from typing import Annotated
 
 from typer import Context, Exit, Option, Typer
 
-from inbound.cli.migrations.migrations_list import MIGRATIONS, MigrationID
 from inbound.cli.utils import async_command
 from infrastructure.containers.application import ApplicationContainer
+from infrastructure.migrations.migrations_list import MigrationID
 
 
 app = Typer()
@@ -29,11 +29,10 @@ async def migrate(
     If the `--migration-id` is provided, run only a specified migration.
     """
     container: ApplicationContainer = ctx.obj
+    migrations_runner = container.infra.migrations_runner()
 
-    if migration_id:
-        if not (migration := MIGRATIONS.get(migration_id)):
-            raise Exit(code=1)
-        await migration(container=container).execute()
-
-    for migration in MIGRATIONS.values():
-        await migration(container=container).execute()
+    try:
+        await migrations_runner.run(migration_id=migration_id)
+    except Exception as exc:
+        print(exc)  # noqa: T201
+        raise Exit(code=1) from exc

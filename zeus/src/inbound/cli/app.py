@@ -2,24 +2,19 @@ from typer import Context, Typer
 
 from inbound.cli.commands import app as cli_app
 from infrastructure.containers.application import ApplicationContainer
+from infrastructure.containers.utils import create_container
 
 
-class CLIApp:
-    def __init__(
-        self,
-        *,
-        container: ApplicationContainer,
-    ) -> None:
-        self._container = container
-        self._app = Typer(
-            help="The CLI tool for interaction with Zeus service.",
-            no_args_is_help=True,
-        )
-        self._app.add_typer(cli_app)
-        self._app.callback()(self._add_di)
+def create_cli_app(*, container: ApplicationContainer | None = None) -> Typer:
+    def callback(ctx: Context) -> None:
+        ctx.obj = container
 
-    def run(self) -> None:
-        self._app()
+    app = Typer(
+        help="The CLI tool for interaction with Zeus service.",
+        no_args_is_help=True,
+    )
+    container = container or create_container()
+    app.add_typer(cli_app)
+    app.callback()(callback)
 
-    def _add_di(self, ctx: Context) -> None:
-        ctx.obj = self._container
+    return app
