@@ -28,7 +28,6 @@ Practice your typing with a selected configuration within a specific time range.
 Review the mistakes made, statistics, and your speed across the typing session.
 
 <br clear="both">
-<br>
 
 ## Install & Update
 
@@ -45,7 +44,8 @@ speedtype
 To update `speedtype`, run the same command as for installation.
 
 ## Development
-This section is intended only for developing the *Speedtype*. If you only want to install the application, go to the [Setup](#Setup) section.
+This section is intended only for developing the *Speedtype*. If you only want to install the application, go to the
+[Install & Update](#install--update) section.
 
 ### Prerequisites
 
