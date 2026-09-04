@@ -1,4 +1,4 @@
-from nodeenv import iteritems
+from funcy import iteritems
 from textual.app import ComposeResult
 from textual.containers import Container
 from textual.reactive import var

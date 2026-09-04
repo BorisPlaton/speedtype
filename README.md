@@ -2,6 +2,7 @@
 TUI for training typing speed.
 
 ## What is Speedtype?
+
 Main features of *Speedtype*:
 - Train your typing speed. Configure a text with various settings: language, time, word length, etc.
 - Check typing statistics with various metrics.
@@ -12,7 +13,7 @@ And all of this is running inside your **terminal**!
 
 Install `speedtype` with:
 ```
-curl -fsSL raw.githubusercontent.com/TypeSpeedOrg/speedtype/refs/heads/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/BorisPlaton/speedtype/refs/heads/main/speedtype/install.sh | sh
 ```
 
 After installation, run:
