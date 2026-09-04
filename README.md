@@ -7,24 +7,27 @@ TUI for training typing speed.
 - [Development](#development)
   - [Prerequisites](#prerequisites)
   - [Components](#components)
-  - [Start Developing](#start-developing)
+  - [Start developing](#start-developing)
   - [Development conventions](#development-conventions)
 
 ## What is Speedtype?
 
 <img align="right" width="60%" src="https://github.com/user-attachments/assets/97ff5690-00ba-443b-beee-0bee1002abfb">
+
 Configure your text training with various settings: language, time, words length, etc.
 
 <br clear="both">
 <br>
 
-<img align="right" width="60%" hspace="" src="https://github.com/user-attachments/assets/26fcec08-dba8-4fa6-be3d-c57d5165bcbe">
+<img align="right" width="60%" src="https://github.com/user-attachments/assets/26fcec08-dba8-4fa6-be3d-c57d5165bcbe">
+
 Practice your typing with a selected configuration within a specific time range.
 
 <br clear="both">
 <br>
 
 <img align="right" width="60%" src="https://github.com/user-attachments/assets/89ebf3f7-8238-40e0-8390-3eaa7a1c654f">
+
 Review the mistakes made, statistics, and your speed across the typing session.
 
 <br clear="both">
