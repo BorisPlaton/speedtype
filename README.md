@@ -13,37 +13,20 @@ TUI for training typing speed.
 
 ## What is Speedtype?
 
-<img align="left" width="60%" src="https://github.com/user-attachments/assets/97ff5690-00ba-443b-beee-0bee1002abfb">
-<br>
-<br>
-<br>
-<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Configure your text training with various settings:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language, time, words length, etc.
+<img align="right" width="60%" src="https://github.com/user-attachments/assets/97ff5690-00ba-443b-beee-0bee1002abfb">
+Configure your text training with various settings: language, time, words length, etc.
 
 <br clear="both">
 <br>
 
 <img align="right" width="60%" hspace="" src="https://github.com/user-attachments/assets/26fcec08-dba8-4fa6-be3d-c57d5165bcbe">
-<br>
-<br>
-<br>
-<br>
-<br>
 Practice your typing with a selected configuration within a specific time range.
 
 <br clear="both">
 <br>
 
-<img align="left" width="60%" src="https://github.com/user-attachments/assets/89ebf3f7-8238-40e0-8390-3eaa7a1c654f">
-<br>
-<br>
-<br>
-<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Review the mistakes made, your statistics, and your
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;speed across the typing session.
+<img align="right" width="60%" src="https://github.com/user-attachments/assets/89ebf3f7-8238-40e0-8390-3eaa7a1c654f">
+Review the mistakes made, your statistics, and your speed across the typing session.
 
 <br clear="both">
 <br>
