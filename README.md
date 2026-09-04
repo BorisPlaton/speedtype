@@ -99,6 +99,5 @@ Each component contains a `justfile` with common commands that help during devel
   - *Issues* - link to the issue which will be resolved after PR is merged.
   - *Attachments* (optional) - contains the additional attachments: photo, videos, etc.
 - Add appropriate labels.
-- Apply only the ***squash and merge*** strategy when merging changes into the `main` branch.
-  - Add PR description into the merge request's `Extended description`.
-- After the PR is merged, delete the original branch.
+- PRs are merged into `main` using the *squash and merge* strategy.
+- After the PR is merged, the branch will be deleted automatically.
