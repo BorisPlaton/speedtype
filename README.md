@@ -6,10 +6,9 @@ TUI for training typing speed.
 - [Install & Update](#install--update)
 - [Development](#development)
   - [Prerequisites](#prerequisites)
-  - [Initialize the project](#initialize-the-project)
+  - [Components](#components)
+  - [Start Developing](#start-developing)
   - [Development conventions](#development-conventions)
-    - [Developing](#developing)
-    - [Pull requests](#pull-requests)
 
 ## What is Speedtype?
 
@@ -26,7 +25,7 @@ Practice your typing with a selected configuration within a specific time range.
 <br>
 
 <img align="right" width="60%" src="https://github.com/user-attachments/assets/89ebf3f7-8238-40e0-8390-3eaa7a1c654f">
-Review the mistakes made, your statistics, and your speed across the typing session.
+Review the mistakes made, statistics, and your speed across the typing session.
 
 <br clear="both">
 <br>
@@ -53,13 +52,34 @@ This section is intended only for developing the *Speedtype*. If you only want t
 - [`uv`](https://docs.astral.sh/uv/) installed
 - [`just`](https://github.com/casey/just) installed
 
-### Initialize the project
-1. Clone the repository
-2. Run `just init`
+
+### Components
+*Speedtype* consists of several parts:
+- `speedtype` — the TUI written in Python. Think of this as a frontend that runs in the user's terminal.
+- `zeus` — the backend application handling text and typing configuration logic.
+
+Depending on which project you work on, the initialization may differ. The common step across all of them is to pull this repository :)
+
+### Start developing
+
+**speedtype**:
+```commandline
+cd speedtype
+just init
+```
+
+**zeus**:
+```commandline
+cd zeus
+just init
+```
+
+Each component contains a `justfile` with common commands that help during development. You can see them all by running
+`just` inside the component directory, or `just help`.
 
 ### Development conventions
 
-#### Developing
+**Developing**:
 1. Checkout from the `main` a new branch with the following name `<feature/bugfix/task>/<short description>`.
    1. How to choose what to specify: *feature*, *bugfix* or *task*:
       - *feature* - adds a new functionality to the end users - it is what they will see when *Speedtype* is launched.
@@ -69,7 +89,7 @@ This section is intended only for developing the *Speedtype*. If you only want t
 3. Push the branch to the `origin`.
 4. Create PR.
 
-#### Pull requests
+**Pull requests**:
 - Title must follow the next structure `<feature/bugfix/task>: <short description>`.
 - PR's body must contain the following sections.
   - *What was done* - description of what was changed/added/removed.
