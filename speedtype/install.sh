@@ -11,13 +11,13 @@ then
     echo "'uv' installed"
 
     if [ -x ~/.local/bin/uv ]; then
-        ~/.local/bin/uv tool install --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype
+        ~/.local/bin/uv tool install --reinstall --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype/speedtype
     else
         echo "Please restart your shell and run this script again."
         exit 0
     fi
 else
-    uv tool install --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype
+    uv tool install --reinstall --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype/speedtype
 fi
 
 echo ""
