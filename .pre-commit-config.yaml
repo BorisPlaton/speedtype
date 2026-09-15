@@ -1,4 +1,4 @@
-default_install_hook_types: [pre-commit, pre-push]
+default_install_hook_types: [ pre-commit, pre-push ]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -11,7 +11,7 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.11
+    rev: v0.16.7
     hooks:
       - id: ruff-format
       - id: ruff-check
@@ -26,3 +26,14 @@ repos:
         always_run: true
         types: [ python ]
         stages: [ pre-push ]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.109.1
+    hooks:
+      - id: terraform_fmt
+        args:
+          - --args=-diff
+          - --args=-write=true
+      - id: terraform_tflint
+        files: \.tf$
+      - id: terraform_trivy
+        files: \.tf$
