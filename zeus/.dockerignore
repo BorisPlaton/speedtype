@@ -2,12 +2,12 @@
 .idea/
 .ruff_cache/
 __pycache__/
-envs/
 src/tests/
 
 .DS_Store
 .dockerignore
 .coverage
+.env.local
 docker-compose.yaml
 Dockerfile
 justfile
