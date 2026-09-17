@@ -1,5 +1,5 @@
 provider "google" {
-  project = data.google_project.this.id
+  project = var.project_id
   region  = var.region
   zone    = var.zone
 }

@@ -19,3 +19,8 @@ variable "env" {
     error_message = "Only dev, prod environments are allowed."
   }
 }
+
+variable "project_id" {
+  description = "GCP project's id."
+  type        = string
+}

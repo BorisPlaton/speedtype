@@ -10,16 +10,15 @@ module "speedtype_cluster" {
   zone       = var.zone
   env        = var.env
   name       = local.cluster_name
-  project_id = data.google_project.this.project_id
+  project_id = var.project_id
 }
 
 module "zeus_workload_sa" {
   source = "./workload_sa"
 
-  name        = "${local.zeus_name}-${var.env}-sa"
-  ksa_name    = "${local.zeus_name}-${var.env}-ksa"
-  permissions = toset([])
-  project_id  = data.google_project.this.project_id
+  name          = "${local.zeus_name}-${var.env}-sa"
+  ksa_name      = "${local.zeus_name}-${var.env}-ksa"
+  ksa_namespace = "${local.zeus_name}-${var.env}"
+  permissions   = toset([])
+  project_id    = var.project_id
 }
-
-data "google_project" "this" {}

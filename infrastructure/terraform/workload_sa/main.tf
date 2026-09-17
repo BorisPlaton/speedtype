@@ -14,5 +14,5 @@ resource "google_project_iam_member" "this" {
 resource "google_service_account_iam_member" "this" {
   service_account_id = google_service_account.sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = var.ksa_name
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.ksa_namespace}/${var.ksa_name}]"
 }

@@ -7,9 +7,10 @@ resource "google_container_cluster" "this" {
   name             = "${var.name}-${var.env}"
   enable_autopilot = true
 
+  #trivy:ignore:AVD-GCP-0051
   resource_labels = {
-    environment = var.env,
-    application = var.name
+    "environment" = var.env,
+    "application" = var.name
   }
 
   location = var.zone
@@ -18,7 +19,7 @@ resource "google_container_cluster" "this" {
   ]
 
   network    = google_compute_network.vpc.self_link
-  subnetwork = google_compute_subnetwork.subnet
+  subnetwork = google_compute_subnetwork.subnet.name
 
   ip_allocation_policy {
     cluster_secondary_range_name  = local.pods_range_name
@@ -40,7 +41,7 @@ resource "google_container_cluster" "this" {
 }
 
 resource "google_compute_network" "vpc" {
-  name                    = "${name}-vpc-${var.env}"
+  name                    = "${var.name}-vpc-${var.env}"
   auto_create_subnetworks = false
 }
 

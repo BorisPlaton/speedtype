@@ -37,3 +37,5 @@ repos:
         files: \.tf$
       - id: terraform_trivy
         files: \.tf$
+      - id: terraform_validate
+        files: \.tf$
