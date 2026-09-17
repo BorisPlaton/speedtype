@@ -1,6 +1,14 @@
 locals {
-  zeus_name    = "zeus"
-  cluster_name = "speedtype"
+  zeus_name              = "zeus"
+  cluster_name           = "speedtype"
+  artifact_registry_name = "speedtype-images"
+}
+
+resource "google_artifact_registry_repository" "this" {
+  location      = var.region
+  repository_id = "${local.artifact_registry_name}-${var.env}"
+  format        = "DOCKER"
+  description   = "Artifact registry for storing docker images of speedtype services."
 }
 
 module "speedtype_cluster" {
