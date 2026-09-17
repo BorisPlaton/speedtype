@@ -2,7 +2,8 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
 from domain.exceptions.base import DomainError
-from inbound.http.routes import router as text_router
+from inbound.http.routes.base import router as base_router
+from inbound.http.routes.text import router as text_router
 from infrastructure.containers.application import ApplicationContainer
 from infrastructure.containers.utils import create_container
 from infrastructure.settings import ZeusSettings
@@ -27,6 +28,7 @@ def create_app(*, container: ApplicationContainer | None = None) -> FastAPI:
         container=container,
     )
     app.include_router(text_router)
+    app.include_router(base_router)
 
     @app.exception_handler(Exception)
     def general_exception_handler(*_args, **_kwargs) -> Response:
