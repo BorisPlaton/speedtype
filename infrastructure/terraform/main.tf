@@ -30,3 +30,9 @@ module "zeus_workload_sa" {
   permissions   = toset([])
   project_id    = var.project_id
 }
+
+module "speedtype_secrets" {
+  source = "./secrets"
+
+  env = var.env
+}

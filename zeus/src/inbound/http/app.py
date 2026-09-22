@@ -22,20 +22,22 @@ def create_app(*, container: ApplicationContainer | None = None) -> FastAPI:
     settings: ZeusSettings = container.config.zeus
 
     app = FastAPI(
-        title=settings.APP_NAME,
+        title=settings.APP_NAME(),
         description="\n".join(line.strip() for line in description.split("\n")),
-        version=settings.VERSION,
+        version=settings.VERSION(),
         container=container,
     )
     app.include_router(text_router)
     app.include_router(base_router)
 
-    @app.exception_handler(Exception)
-    def general_exception_handler(*_args, **_kwargs) -> Response:
-        return JSONResponse(
-            content={"detail": "Something went wrong..."},
-            status_code=500,
-        )
+    if not settings.DEBUG():
+
+        @app.exception_handler(Exception)
+        def general_exception_handler(*_args, **_kwargs) -> Response:
+            return JSONResponse(
+                content={"detail": "Something went wrong..."},
+                status_code=500,
+            )
 
     @app.exception_handler(DomainError)
     def domain_error_handler(_request: Request, exc: DomainError) -> Response:
