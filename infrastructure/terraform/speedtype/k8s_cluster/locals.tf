@@ -1,16 +1,32 @@
 locals {
   project_id = var.project_id
-  region     = var.region
+  region     = var.cluster_region
 
   cluster = {
-    name                = var.cluster_name
-    environment         = var.cluster_environment
-    region              = local.region
-    enable_autopilot    = true
-    pods_range_name     = "pods"
-    services_range_name = "services"
-    private_nodes       = true
-    private_master      = true
+    name                     = var.cluster_name
+    environment              = var.cluster_environment
+    zone                     = var.cluster_zone
+    pods_range_name          = "pods"
+    services_range_name      = "services"
+    private_nodes            = true
+    private_master           = true
+    remove_default_node_pool = true
+    enable_network_policy    = true
+
+    node = {
+      node_count              = 1
+      min_node_count          = 0
+      machine_type            = "e2-small"
+      image_type              = "COS_CONTAINERD"
+      spot                    = true
+      disk_size_gb            = 10
+      disk_type               = "pd-standard"
+      auto_repair             = true
+      auto_upgrade            = true
+      upgrade_max_surge       = 1
+      upgrade_max_unavailable = 0
+      metadata_server_mode    = "GKE_METADATA"
+    }
   }
 
   vpc = {

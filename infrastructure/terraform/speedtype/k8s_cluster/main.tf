@@ -1,17 +1,33 @@
+#############
+## Cluster ##
+#############
+
 #trivy:ignore:AVD-GCP-0051
+#trivy:ignore:AVD-GCP-0061
 resource "google_container_cluster" "this" {
-  name             = "${local.cluster.name}-${local.cluster.environment}"
-  enable_autopilot = local.cluster.enable_autopilot
+  name     = "${local.cluster.name}-${local.cluster.environment}"
+  location = local.cluster.zone
+  node_locations = [
+    local.cluster.zone
+  ]
 
   resource_labels = {
     "environment" = local.cluster.environment,
     "application" = local.cluster.name
   }
 
-  location = local.cluster.region
-
   network    = google_compute_network.vpc.self_link
   subnetwork = google_compute_subnetwork.subnet.name
+
+  # We can't create a cluster with no node pool defined, but we want to only use
+  # separately managed node pools. So we create the smallest possible default
+  # node pool and immediately delete it.
+  remove_default_node_pool = local.cluster.remove_default_node_pool
+  initial_node_count       = 1
+
+  network_policy {
+    enabled = local.cluster.enable_network_policy
+  }
 
   ip_allocation_policy {
     cluster_secondary_range_name  = local.cluster.pods_range_name
@@ -22,15 +38,54 @@ resource "google_container_cluster" "this" {
     enable_private_nodes    = local.cluster.private_nodes
     enable_private_endpoint = local.cluster.private_master
   }
+}
 
-  cluster_autoscaling {
-    auto_provisioning_defaults {
-      service_account = google_service_account.gke_node_sa.email
+#trivy:ignore:AVD-GCP-0048
+resource "google_container_node_pool" "this" {
+  cluster  = google_container_cluster.this.name
+  location = local.cluster.zone
+
+  node_config {
+    image_type   = local.cluster.node.image_type
+    machine_type = local.cluster.node.machine_type
+    spot         = local.cluster.node.spot
+
+    # Google recommends custom service accounts that have cloud-platform
+    # scope and permissions granted via IAM Roles.
+    service_account = google_service_account.gke_node_sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+
+    boot_disk {
+      size_gb   = local.cluster.node.disk_size_gb
+      disk_type = local.cluster.node.disk_type
+    }
+
+    workload_metadata_config {
+      mode = local.cluster.node.metadata_server_mode
     }
   }
 
-  master_authorized_networks_config {}
+  autoscaling {
+    min_node_count = local.cluster.node.min_node_count
+    max_node_count = local.cluster.node.node_count
+  }
+
+  upgrade_settings {
+    max_surge       = local.cluster.node.upgrade_max_surge
+    max_unavailable = local.cluster.node.upgrade_max_unavailable
+  }
+
+  management {
+    auto_repair  = local.cluster.node.auto_repair
+    auto_upgrade = local.cluster.node.auto_upgrade
+  }
 }
+
+################
+## Networking ##
+################
 
 resource "google_compute_network" "vpc" {
   name                    = local.vpc.name
@@ -60,6 +115,10 @@ resource "google_compute_subnetwork" "subnet" {
     ip_cidr_range = local.subnet.secondary_ranges[1]
   }
 }
+
+#####################
+## Service Account ##
+#####################
 
 resource "google_service_account" "gke_node_sa" {
   account_id   = local.node_sa.account_id

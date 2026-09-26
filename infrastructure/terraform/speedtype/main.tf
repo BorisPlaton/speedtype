@@ -20,8 +20,9 @@ module "k8s_cluster" {
   depends_on = [google_project_service.required_apis]
 
   project_id          = local.project_id
+  cluster_region      = local.k8s_cluster.region
   cluster_environment = local.environment
-  region              = local.k8s_cluster.region
+  cluster_zone        = local.k8s_cluster.zone
   cluster_name        = local.k8s_cluster.cluster_name
 }
 
