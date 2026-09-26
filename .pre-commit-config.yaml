@@ -14,8 +14,10 @@ repos:
     rev: v0.16.7
     hooks:
       - id: ruff-format
+        files: ^(zeus|speedtype)/
       - id: ruff-check
         args: [ --fix ]
+        files: ^(zeus|speedtype)/
   - repo: local
     hooks:
       - id: zeus tests
@@ -23,9 +25,8 @@ repos:
         entry: just --justfile zeus/justfile tests
         language: system
         pass_filenames: false
-        always_run: true
-        types: [ python ]
         stages: [ pre-push ]
+        files: ^zeus/
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.109.1
     hooks:

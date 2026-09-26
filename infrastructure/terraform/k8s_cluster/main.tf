@@ -3,11 +3,11 @@ locals {
   services_range_name = "services"
 }
 
+#trivy:ignore:AVD-GCP-0051
 resource "google_container_cluster" "this" {
   name             = "${var.cluster_name}-${var.cluster_environment}"
   enable_autopilot = true
 
-  #trivy:ignore:AVD-GCP-0051
   resource_labels = {
     "environment" = var.cluster_environment,
     "application" = var.cluster_name
