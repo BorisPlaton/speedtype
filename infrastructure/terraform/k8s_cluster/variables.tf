@@ -1,4 +1,4 @@
-variable "name" {
+variable "cluster_name" {
   description = "Cluster's name."
   type        = string
 }
@@ -18,7 +18,7 @@ variable "zone" {
   type        = string
 }
 
-variable "env" {
+variable "cluster_environment" {
   description = "Cluster's environment."
   type        = string
 }

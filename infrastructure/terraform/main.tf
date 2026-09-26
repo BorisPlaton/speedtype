@@ -1,38 +1,53 @@
-locals {
-  zeus_name              = "zeus"
-  cluster_name           = "speedtype"
-  artifact_registry_name = "speedtype-images"
+resource "google_project_service" "required_apis" {
+  for_each = toset(local.apis.required)
+
+  project            = local.project_id
+  disable_on_destroy = local.apis.disable_on_destroy
+  service            = each.value
 }
 
 resource "google_artifact_registry_repository" "this" {
-  location      = var.region
-  repository_id = "${local.artifact_registry_name}-${var.env}"
-  format        = "DOCKER"
-  description   = "Artifact registry for storing docker images of speedtype services."
+  depends_on = [google_project_service.required_apis]
+
+  location      = local.artifact_registry.location
+  repository_id = local.artifact_registry.repository_id
+  format        = local.artifact_registry.format
+  description   = local.artifact_registry.description
 }
 
-module "speedtype_cluster" {
-  source = "./k8s_cluster"
+#trivy:ignore:AVD-GCP-0066
+#trivy:ignore:AVD-GCP-0077
+resource "google_storage_bucket" "tf_state" {
+  depends_on = [google_project_service.required_apis]
 
-  region     = var.region
-  zone       = var.zone
-  env        = var.env
-  name       = local.cluster_name
-  project_id = var.project_id
+  uniform_bucket_level_access = local.tf_remote_state.uniform_bucket_level_access
+  name                        = local.tf_remote_state.name
+  location                    = local.tf_remote_state.location
+
+  versioning {
+    enabled = local.tf_remote_state.enable_versioning
+  }
 }
 
-module "zeus_workload_sa" {
-  source = "./workload_sa"
+module "k8s_cluster" {
+  source     = "./k8s_cluster"
+  depends_on = [google_project_service.required_apis]
 
-  name          = "${local.zeus_name}-${var.env}-sa"
-  ksa_name      = "${local.zeus_name}-${var.env}-ksa"
-  ksa_namespace = "${local.zeus_name}-${var.env}"
-  permissions   = toset([])
-  project_id    = var.project_id
+  project_id          = local.project_id
+  cluster_environment = local.environment
+  region              = local.k8s_cluster.region
+  zone                = local.k8s_cluster.zone
+  cluster_name        = local.k8s_cluster.cluster_name
 }
 
-module "speedtype_secrets" {
-  source = "./secrets"
+module "zeus" {
+  source     = "./zeus"
+  depends_on = [google_project_service.required_apis]
 
-  env = var.env
+  project_id       = local.project_id
+  zeus_environment = local.environment
+  sa_name          = local.zeus.sa_name
+  sa_permissions   = local.zeus.sa_permissions
+  ksa_name         = local.zeus.ksa_name
+  ksa_namespace    = local.zeus.ksa_namespace
 }

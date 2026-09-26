@@ -10,12 +10,12 @@ variable "zone" {
   default     = "europe-central2-a"
 }
 
-variable "env" {
+variable "environment" {
   description = "Environment for which resources is being provisioned."
   type        = string
 
   validation {
-    condition     = contains(["dev", "prod"], var.env)
+    condition     = contains(["dev", "prod"], var.environment)
     error_message = "Only dev, prod environments are allowed."
   }
 }

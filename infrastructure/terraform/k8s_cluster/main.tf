@@ -4,13 +4,13 @@ locals {
 }
 
 resource "google_container_cluster" "this" {
-  name             = "${var.name}-${var.env}"
+  name             = "${var.cluster_name}-${var.cluster_environment}"
   enable_autopilot = true
 
   #trivy:ignore:AVD-GCP-0051
   resource_labels = {
-    "environment" = var.env,
-    "application" = var.name
+    "environment" = var.cluster_environment,
+    "application" = var.cluster_name
   }
 
   location = var.zone
@@ -41,12 +41,12 @@ resource "google_container_cluster" "this" {
 }
 
 resource "google_compute_network" "vpc" {
-  name                    = "${var.name}-vpc-${var.env}"
+  name                    = "${var.cluster_name}-vpc-${var.cluster_environment}"
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  name                     = "${var.region}-${var.env}"
+  name                     = "${var.region}-${var.cluster_environment}"
   region                   = var.region
   network                  = google_compute_network.vpc.self_link
   ip_cidr_range            = "10.0.0.0/24"
@@ -70,7 +70,7 @@ resource "google_compute_subnetwork" "subnet" {
 }
 
 resource "google_service_account" "gke_node_sa" {
-  account_id   = "${var.name}-${var.env}-node-sa"
+  account_id   = "${var.cluster_name}-${var.cluster_environment}-node-sa"
   display_name = "GKE node service account."
 }
 
