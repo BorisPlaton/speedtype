@@ -13,11 +13,6 @@ variable "region" {
   type        = string
 }
 
-variable "zone" {
-  description = "Zone where cluster will be created."
-  type        = string
-}
-
 variable "cluster_environment" {
   description = "Cluster's environment."
   type        = string

@@ -4,13 +4,6 @@ locals {
   region      = var.region
   zone        = var.zone
 
-  tf_remote_state = {
-    location                    = local.region
-    name                        = "tf-remote-state"
-    enable_versioning           = true
-    uniform_bucket_level_access = true
-  }
-
   zeus = {
     sa_name        = "zeus-${local.environment}-sa",
     sa_permissions = toset([])
