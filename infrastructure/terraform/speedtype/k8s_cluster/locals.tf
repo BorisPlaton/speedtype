@@ -19,7 +19,7 @@ locals {
       machine_type            = "e2-small"
       image_type              = "COS_CONTAINERD"
       spot                    = true
-      disk_size_gb            = 10
+      disk_size_gb            = 20
       disk_type               = "pd-standard"
       auto_repair             = true
       auto_upgrade            = true
