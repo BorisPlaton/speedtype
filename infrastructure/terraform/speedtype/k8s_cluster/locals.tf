@@ -9,7 +9,7 @@ locals {
     pods_range_name          = "pods"
     services_range_name      = "services"
     private_nodes            = true
-    private_master           = true
+    private_master           = false
     remove_default_node_pool = true
     enable_network_policy    = true
 

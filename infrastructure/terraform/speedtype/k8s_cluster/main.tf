@@ -7,9 +7,6 @@
 resource "google_container_cluster" "this" {
   name     = "${local.cluster.name}-${local.cluster.environment}"
   location = local.cluster.zone
-  node_locations = [
-    local.cluster.zone
-  ]
 
   resource_labels = {
     "environment" = local.cluster.environment,
@@ -24,6 +21,10 @@ resource "google_container_cluster" "this" {
   # node pool and immediately delete it.
   remove_default_node_pool = local.cluster.remove_default_node_pool
   initial_node_count       = 1
+
+  workload_identity_config {
+    workload_pool = "${local.project_id}.svc.id.goog"
+  }
 
   network_policy {
     enabled = local.cluster.enable_network_policy
