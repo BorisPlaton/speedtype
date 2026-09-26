@@ -19,7 +19,6 @@ module "k8s_cluster" {
   source     = "./k8s_cluster"
   depends_on = [google_project_service.required_apis]
 
-  project_id          = local.project_id
   cluster_region      = local.k8s_cluster.region
   cluster_environment = local.environment
   cluster_zone        = local.k8s_cluster.zone
@@ -30,7 +29,6 @@ module "zeus" {
   source     = "./zeus"
   depends_on = [google_project_service.required_apis]
 
-  project_id       = local.project_id
   zeus_environment = local.environment
   sa_name          = local.zeus.sa_name
   sa_permissions   = local.zeus.sa_permissions

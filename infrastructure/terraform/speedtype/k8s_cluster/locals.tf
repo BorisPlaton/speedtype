@@ -1,5 +1,5 @@
 locals {
-  project_id = var.project_id
+  project_id = data.google_project.this.project_id
   region     = var.cluster_region
 
   cluster = {

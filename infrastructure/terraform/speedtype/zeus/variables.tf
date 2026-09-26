@@ -1,8 +1,3 @@
-variable "project_id" {
-  description = "Project ID in which service account is being created."
-  type        = string
-}
-
 variable "zeus_environment" {
   description = "Environment for which secrets are being stored."
   type        = string

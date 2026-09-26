@@ -1,15 +1,10 @@
-variable "project_id" {
-  description = "Project ID in which cluster is being created."
-  type        = string
-}
-
 variable "cluster_name" {
   description = "Cluster's name."
   type        = string
 }
 
 variable "cluster_region" {
-  description = "Region to provision resources."
+  description = "Region to provision cluster resources."
   type        = string
 }
 

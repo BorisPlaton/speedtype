@@ -1,5 +1,5 @@
 #############
-## Cluster ##
+## CLUSTER ##
 #############
 
 #trivy:ignore:AVD-GCP-0051
@@ -85,7 +85,7 @@ resource "google_container_node_pool" "this" {
 }
 
 ################
-## Networking ##
+## NETWORKING ##
 ################
 
 resource "google_compute_network" "vpc" {
@@ -118,7 +118,7 @@ resource "google_compute_subnetwork" "subnet" {
 }
 
 #####################
-## Service Account ##
+## SERVICE ACCOUNT ##
 #####################
 
 resource "google_service_account" "gke_node_sa" {
