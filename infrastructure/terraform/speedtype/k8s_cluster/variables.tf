@@ -1,19 +1,19 @@
-variable "cluster_name" {
+variable "name" {
   description = "Cluster's name."
   type        = string
 }
 
-variable "cluster_region" {
+variable "region" {
   description = "Region to provision cluster resources."
   type        = string
 }
 
-variable "cluster_zone" {
+variable "zone" {
   description = "Zone where zonal cluster will be created."
   type        = string
 }
 
-variable "cluster_environment" {
+variable "environment" {
   description = "Cluster's environment."
   type        = string
 }

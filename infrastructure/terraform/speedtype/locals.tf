@@ -4,13 +4,6 @@ locals {
   region      = var.region
   zone        = var.zone
 
-  zeus = {
-    sa_name        = "zeus-${local.environment}-sa",
-    sa_permissions = toset([])
-    ksa_name       = "zeus-${local.environment}-ksa"
-    ksa_namespace  = "zeus-${local.environment}"
-  }
-
   k8s_cluster = {
     region       = local.region
     zone         = local.zone

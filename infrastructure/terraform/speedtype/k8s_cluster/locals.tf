@@ -1,11 +1,11 @@
 locals {
   project_id = data.google_project.this.project_id
-  region     = var.cluster_region
+  region     = var.region
 
   cluster = {
-    name                     = var.cluster_name
-    environment              = var.cluster_environment
-    zone                     = var.cluster_zone
+    name                     = var.name
+    environment              = var.environment
+    zone                     = var.zone
     pods_range_name          = "pods"
     services_range_name      = "services"
     private_nodes            = true

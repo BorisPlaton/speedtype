@@ -3,12 +3,12 @@
 ##############
 
 resource "google_service_account" "sa" {
-  account_id   = var.sa_name
-  display_name = var.sa_name
+  account_id   = local.zeus.sa_name
+  display_name = local.zeus.sa_name
 }
 
 resource "google_project_iam_member" "this" {
-  for_each = var.sa_permissions
+  for_each = local.zeus.sa_permissions
 
   project = local.project_id
   role    = each.value
@@ -18,7 +18,7 @@ resource "google_project_iam_member" "this" {
 resource "google_service_account_iam_member" "this" {
   service_account_id = google_service_account.sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${local.project_id}.svc.id.goog[${var.ksa_namespace}/${var.ksa_name}]"
+  member             = "serviceAccount:${local.project_id}.svc.id.goog[${local.zeus.ksa_namespace}/${local.zeus.ksa_name}]"
 }
 
 #############
@@ -26,7 +26,7 @@ resource "google_service_account_iam_member" "this" {
 #############
 
 resource "google_secret_manager_secret" "mongodb_username" {
-  secret_id = "MONGODB_USERNAME_${var.zeus_environment}"
+  secret_id = "MONGODB_USERNAME_${local.environment}"
 
   replication {
     auto {}
@@ -44,7 +44,7 @@ resource "google_secret_manager_secret_version" "mongodb_username" {
 
 
 resource "google_secret_manager_secret" "mongodb_password" {
-  secret_id = "MONGODB_PASSWORD_${var.zeus_environment}"
+  secret_id = "MONGODB_PASSWORD_${local.environment}"
 
   replication {
     auto {}
