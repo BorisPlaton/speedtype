@@ -2,10 +2,26 @@ locals {
   project_id  = data.google_project.this.project_id
   environment = var.environment
 
-  zeus = {
-    sa_name        = "zeus-${local.environment}-sa"
-    sa_permissions = toset([])
-    ksa_name       = "zeus-${local.environment}-ksa"
-    ksa_namespace  = "zeus-${local.environment}"
+  sa = {
+    name        = "zeus-${local.environment}-sa"
+    permissions = toset([])
+  }
+
+  ksa = {
+    name      = "zeus-${local.environment}-ksa"
+    namespace = "zeus-${local.environment}"
+    role      = "roles/iam.workloadIdentityUser"
+  }
+
+  secrets = {
+    mongodb_username = {
+      name   = "MONGODB_USERNAME_${local.environment}"
+      length = 8
+    }
+    mongodb_password = {
+      name                = "MONGODB_PASSWORD_${local.environment}"
+      length              = 24
+      add_special_symbols = true
+    }
   }
 }
