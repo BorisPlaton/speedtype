@@ -1,15 +1,3 @@
-variable "region" {
-  description = "Default region to provision resources."
-  type        = string
-  default     = "europe-central2"
-}
-
-variable "zone" {
-  description = "Default region's zone to provision resources."
-  type        = string
-  default     = "europe-central2-a"
-}
-
 variable "environment" {
   description = "Environment for which resources is being provisioned."
   type        = string

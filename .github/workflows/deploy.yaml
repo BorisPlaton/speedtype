@@ -1,0 +1,6 @@
+name: Deploy to the cluster
+
+on:
+  workflow_call:
+
+jobs:

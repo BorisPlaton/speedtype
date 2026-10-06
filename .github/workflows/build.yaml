@@ -1,0 +1,6 @@
+name: Build Docker image
+
+on:
+  workflow_call:
+
+jobs:

@@ -1,7 +1,12 @@
-## Speedtype Infrastructure
+# Speedtype Infrastructure
 
-Speedtype was designed to run on Google Cloud Platform (GCP). All infrastructure was written accordingly, using
-Terraform.
+Speedtype was designed to run on Google Cloud Platform (GCP) with GKE cluster. All infrastructure was written
+accordingly, using
+Terraform and Kubernetes.
+
+## GCP Infrastructure
+
+Infrastructure resources, such as: GKE, VPC, Subnets, etc. as written using Terraform.
 
 ### Terraform remote state
 
@@ -35,10 +40,11 @@ export TF_VAR_environment="infrastructure environment"
 terraform init \
   -backend-config="bucket=tf-remote-state-${TF_VAR_project_id}" \
   -backend-config="prefix=envs/${TF_VAR_environment}"
-terraform apply -var-file=speedtype.tfvars -auto-approve
+terraform apply -auto-approve
 ```
 
 1. `export TF_VAR_...` — sets up Terraform variables using environment variables.
 2. `terraform init` — switches to the specific environment state, depending on what you've set `TF_VAR_environment` to:
    `dev` or `prod`.
-3. `terraform apply` — an example of a command that utilizes the common `*.tfvars` file.
+
+## Speedtype K8s Cluster

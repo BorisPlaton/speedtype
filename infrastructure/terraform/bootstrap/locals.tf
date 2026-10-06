@@ -1,12 +1,12 @@
 locals {
   project_id = var.project_id
-  region     = var.region
-  zone       = var.zone
+  region     = "europe-central2"
+  zone       = "europe-central2-a"
 
-  tf_remote_state = {
-    location                    = local.region
-    name                        = "tf-remote-state-${local.project_id}"
-    enable_versioning           = true
-    uniform_bucket_level_access = true
+  apis = {
+    required = [
+      "iam.googleapis.com",
+    ]
+    disable_on_destroy = false
   }
 }

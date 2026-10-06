@@ -1,11 +1,17 @@
-#trivy:ignore:AVD-GCP-0066
-#trivy:ignore:AVD-GCP-0077
-resource "google_storage_bucket" "tf_state" {
-  uniform_bucket_level_access = local.tf_remote_state.uniform_bucket_level_access
-  name                        = local.tf_remote_state.name
-  location                    = local.tf_remote_state.location
+resource "google_project_service" "required_apis" {
+  for_each = toset(local.apis.required)
 
-  versioning {
-    enabled = local.tf_remote_state.enable_versioning
-  }
+  project            = local.project_id
+  disable_on_destroy = local.apis.disable_on_destroy
+  service            = each.value
+}
+
+module "tf_remote_state" {
+  source = "./tf_remote_state"
+
+  region = local.region
+}
+
+module "workload_identity_pool" {
+  source = "./workload_identity_pool"
 }

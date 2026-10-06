@@ -1,8 +1,8 @@
 locals {
   project_id  = var.project_id
   environment = var.environment
-  region      = var.region
-  zone        = var.zone
+  region      = "europe-central2"
+  zone        = "europe-central2-a"
 
   k8s_cluster = {
     region       = local.region

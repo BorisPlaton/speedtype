@@ -1,0 +1,63 @@
+name: Orchestrating pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  # Checks what files have been changed.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      zeus: ${{ steps.filter.outputs.zeus }}
+      terraform: ${{ steps.filter.outputs.terraform }}
+      k8s: ${{ steps.filter.outputs.k8s }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Filter changes
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            zeus: [
+              'zeus/src/**',
+              'zeus/Dockerfile',
+              'zeus/pyproject.toml',
+              'zeus/uv.lock',
+            ]
+            terraform: ['infrastructure/terraform/speedtype/**']
+            k8s: ['infrastructure/k8s/**']
+
+  # Applies infrastructure changes on GCP.
+  terraform:
+    needs: changes
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      needs.changes.outputs.terraform == 'true'
+    secrets: inherit
+    uses: '.github/workflows/terraform.yaml'
+    with:
+      environment: 'dev'
+
+  # Builds and pushes docker images to the artifact registry.
+  build:
+    needs: changes
+    if: needs.changes.outputs.zeus == 'true'
+    secrets: inherit
+    uses: '.github/workflows/build.yaml'
+
+  # Deploys components to the k8s cluster.
+  deploy:
+    needs: [ changes, build ]
+    if: >-
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      !failure() &&
+      !cancelled() &&
+      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
+    secrets: inherit
+    uses: '.github/workflows/deploy.yaml'
