@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - task/deploy-to-gcp
   pull_request:
 
 jobs:
@@ -43,21 +44,21 @@ jobs:
     with:
       environment: 'dev'
 
-  # Builds and pushes docker images to the artifact registry.
-  build:
-    needs: changes
-    if: needs.changes.outputs.zeus == 'true'
-    secrets: inherit
-    uses: '.github/workflows/build.yaml'
-
-  # Deploys components to the k8s cluster.
-  deploy:
-    needs: [ changes, build ]
-    if: >-
-      always() &&
-      github.ref == 'refs/heads/main' &&
-      !failure() &&
-      !cancelled() &&
-      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
-    secrets: inherit
-    uses: '.github/workflows/deploy.yaml'
+#  # Builds and pushes docker images to the artifact registry.
+#  build:
+#    needs: changes
+#    if: needs.changes.outputs.zeus == 'true'
+#    secrets: inherit
+#    uses: '.github/workflows/build.yaml'
+#
+#  # Deploys components to the k8s cluster.
+#  deploy:
+#    needs: [ changes, build ]
+#    if: >-
+#      always() &&
+#      github.ref == 'refs/heads/main' &&
+#      !failure() &&
+#      !cancelled() &&
+#      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
+#    secrets: inherit
+#    uses: '.github/workflows/deploy.yaml'
