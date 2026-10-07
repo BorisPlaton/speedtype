@@ -3,7 +3,7 @@ resource "google_iam_workload_identity_pool" "github" {
 }
 
 resource "google_iam_workload_identity_pool_provider" "github" {
-  workload_identity_pool_id          = google_iam_workload_identity_pool.github.name
+  workload_identity_pool_id          = google_iam_workload_identity_pool.github.workload_identity_pool_id
   workload_identity_pool_provider_id = local.github_pool.provider_name
 
   attribute_mapping   = local.github_pool.attribute_mapping
@@ -25,7 +25,7 @@ resource "google_service_account_iam_member" "github_binding" {
 }
 
 resource "google_project_iam_member" "terraform_ci_role" {
-  for_each = toset(local.ci_sa.sa_roles)
+  for_each = toset(local.ci_sa.sa_member_roles)
   project  = local.project_id
   role     = each.value
   member   = "serviceAccount:${google_service_account.terraform_ci.email}"

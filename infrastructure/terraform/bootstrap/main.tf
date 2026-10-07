@@ -15,3 +15,8 @@ module "tf_remote_state" {
 module "workload_identity_pool" {
   source = "./workload_identity_pool"
 }
+
+moved {
+  to   = module.tf_remote_state.google_storage_bucket.tf_remote_state
+  from = google_storage_bucket.tf_state
+}

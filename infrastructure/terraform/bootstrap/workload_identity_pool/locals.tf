@@ -6,7 +6,7 @@ locals {
     name                = "github-pool"
     provider_name       = "github-provider"
     issuer_uri          = "https://token.actions.githubusercontent.com"
-    attribute_condition = "assertion.repository == ${local.github_repository}"
+    attribute_condition = "assertion.repository == '${local.github_repository}'"
 
     attribute_mapping = {
       "google.subject"       = "assertion.sub"
@@ -17,12 +17,12 @@ locals {
   ci_sa = {
     account_id  = "terraform-ci"
     member_role = "roles/iam.workloadIdentityUser"
-    sa_roles = [
+
+    sa_member_roles = [
       "roles/compute.networkAdmin",
       "roles/container.admin",
       "roles/artifactregistry.admin",
       "roles/iam.serviceAccountAdmin",
-      "roles/iam.serviceAccountIamAdmin",
       "roles/resourcemanager.projectIamAdmin",
       "roles/secretmanager.admin",
     ]
