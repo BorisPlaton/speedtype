@@ -6,5 +6,9 @@ terraform {
       source  = "hashicorp/google"
       version = "7.7.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "6.6.0"
+    }
   }
 }
