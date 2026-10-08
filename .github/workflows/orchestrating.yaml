@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - task/deploy-to-gcp
+  pull_request:
 
 jobs:
 
@@ -31,13 +31,15 @@ jobs:
               'zeus/pyproject.toml',
               'zeus/uv.lock',
             ]
-            terraform: ['infrastructure/terraform/speedtype/**']
+            terraform: ['infrastructure/terraform/**']
             k8s: ['infrastructure/k8s/**']
 
   # Applies infrastructure changes on GCP.
   terraform:
     needs: changes
-    if: needs.changes.outputs.terraform == 'true'
+    if: >-
+      github.ref == 'refs/heads/main'
+      needs.changes.outputs.terraform == 'true'
     secrets: inherit
     uses: './.github/workflows/terraform.yaml'
     permissions:
@@ -46,13 +48,13 @@ jobs:
     with:
       environment: 'dev'
 
-#  # Builds and pushes docker images to the artifact registry.
-#  build:
-#    needs: changes
-#    if: needs.changes.outputs.zeus == 'true'
-#    secrets: inherit
-#    uses: './.github/workflows/build.yaml'
-#
+  # Builds and pushes Zeus docker image to the artifact registry.
+  build:
+    needs: changes
+    if: needs.changes.outputs.zeus == 'true'
+    secrets: inherit
+    uses: './.github/workflows/build.yaml'
+
 #  # Deploys components to the k8s cluster.
 #  deploy:
 #    needs: [ changes, build ]

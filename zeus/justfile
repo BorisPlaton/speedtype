@@ -1,4 +1,4 @@
-env_file := "./envs/.env.local"
+env_file := ".env.local"
 
 set dotenv-path := env_file
 set dotenv-load

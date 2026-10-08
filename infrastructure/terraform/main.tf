@@ -15,10 +15,27 @@ resource "google_artifact_registry_repository" "this" {
   description   = local.artifact_registry.description
 }
 
+module "tf_remote_state" {
+  source     = "./tf_remote_state"
+  depends_on = [google_project_service.required_apis]
+
+  project_id = local.project_id
+  region     = local.region
+}
+
+module "external_identities" {
+  source     = "./external_identities"
+  depends_on = [module.tf_remote_state]
+
+  project_id                  = local.project_id
+  tf_remote_state_bucket_name = module.tf_remote_state.bucket_name
+}
+
 module "k8s_cluster" {
   source     = "./k8s_cluster"
   depends_on = [google_project_service.required_apis]
 
+  project_id  = local.project_id
   region      = local.k8s_cluster.region
   environment = local.environment
   zone        = local.k8s_cluster.zone
@@ -29,5 +46,6 @@ module "zeus" {
   source     = "./zeus"
   depends_on = [google_project_service.required_apis]
 
+  project_id  = local.project_id
   environment = local.environment
 }

@@ -1,5 +1,5 @@
 locals {
-  project_id = data.google_project.this.project_id
+  project_id = var.project_id
 
   tf_remote_state = {
     location                    = var.region

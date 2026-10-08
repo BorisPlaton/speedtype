@@ -5,8 +5,9 @@
 #trivy:ignore:AVD-GCP-0051
 #trivy:ignore:AVD-GCP-0061
 resource "google_container_cluster" "this" {
-  name     = "${local.cluster.name}-${local.cluster.environment}"
-  location = local.cluster.zone
+  name                = "${local.cluster.name}-${local.cluster.environment}"
+  location            = local.cluster.zone
+  deletion_protection = local.cluster.deletion_protection
 
   resource_labels = {
     "environment" = local.cluster.environment,

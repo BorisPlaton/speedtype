@@ -1,5 +1,5 @@
 locals {
-  project_id = data.google_project.this.project_id
+  project_id = var.project_id
   region     = var.region
 
   cluster = {
@@ -12,6 +12,7 @@ locals {
     private_master           = false
     remove_default_node_pool = true
     enable_network_policy    = true
+    deletion_protection      = false
 
     node = {
       node_count              = 1

@@ -1,5 +1,5 @@
 locals {
-  project_id = data.google_project.this.project_id
+  project_id = var.project_id
 
   github = {
     repository           = "speedtype"
@@ -19,8 +19,9 @@ locals {
     }
   }
 
+  workload_identity_pool_name = "external-identities"
+
   github_identity_pool = {
-    name                = "github-pool"
     provider_name       = "github-provider"
     issuer_uri          = "https://token.actions.githubusercontent.com"
     attribute_condition = "assertion.repository == '${local.github.full_repository_name}'"

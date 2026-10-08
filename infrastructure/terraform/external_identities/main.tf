@@ -1,10 +1,14 @@
-#################################################
-## WORKLOAD IDENTITY POOL / GITHUB INTEGRATION ##
-#################################################
+############################
+## WORKLOAD IDENTITY POOL ##
+############################
 
 resource "google_iam_workload_identity_pool" "this" {
-  workload_identity_pool_id = local.github_identity_pool.name
+  workload_identity_pool_id = local.workload_identity_pool_name
 }
+
+########################
+## GITHUB INTEGRATION ##
+########################
 
 resource "google_iam_workload_identity_pool_provider" "github" {
   workload_identity_pool_id          = google_iam_workload_identity_pool.this.workload_identity_pool_id

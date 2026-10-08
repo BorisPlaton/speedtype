@@ -17,7 +17,7 @@ jobs:
       TF_VAR_environment: ${{ inputs.environment }}
     defaults:
       run:
-        working-directory: './infrastructure/terraform/speedtype'
+        working-directory: './infrastructure/terraform'
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
