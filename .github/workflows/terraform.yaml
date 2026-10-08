@@ -29,9 +29,10 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
       - name: Initialize Terraform
-        run: terraform init \
-          -backend-config="bucket=tf-remote-state-${TF_VAR_project_id}" \
-          -backend-config="prefix=envs/${TF_VAR_environment}"
+        run: |
+          terraform init \
+            -backend-config="bucket=tf-remote-state-${TF_VAR_project_id}" \
+            -backend-config="prefix=envs/${TF_VAR_environment}"
       - name: Show changes
         run: terraform plan
       - name: Apply changes
