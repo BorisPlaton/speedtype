@@ -38,7 +38,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.terraform == 'true'
     secrets: inherit
-    uses: '.github/workflows/terraform.yaml'
+    uses: './.github/workflows/terraform.yaml'
     with:
       environment: 'dev'
 
@@ -47,7 +47,7 @@ jobs:
 #    needs: changes
 #    if: needs.changes.outputs.zeus == 'true'
 #    secrets: inherit
-#    uses: '.github/workflows/build.yaml'
+#    uses: './.github/workflows/build.yaml'
 #
 #  # Deploys components to the k8s cluster.
 #  deploy:
@@ -59,4 +59,4 @@ jobs:
 #      !cancelled() &&
 #      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
 #    secrets: inherit
-#    uses: '.github/workflows/deploy.yaml'
+#    uses: './.github/workflows/deploy.yaml'
