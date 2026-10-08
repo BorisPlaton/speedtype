@@ -14,7 +14,7 @@ locals {
       }
       values = {
         gcp_project_id         = local.project_id
-        tf_remote_state_bucket = "${local.terraform_sa.remote_state.bucket_name}-${local.project_id}"
+        tf_remote_state_bucket = var.tf_remote_state_bucket_name
       }
     }
   }

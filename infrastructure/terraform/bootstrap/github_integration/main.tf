@@ -58,7 +58,7 @@ resource "github_actions_secret" "terraform_sa" {
 resource "github_actions_secret" "workload_identity_provider" {
   repository      = local.github.repository
   secret_name     = local.github.secrets.names.workload_identity_provider
-  plaintext_value = google_iam_workload_identity_pool.this.name
+  plaintext_value = google_iam_workload_identity_pool_provider.github.name
 }
 
 resource "github_actions_secret" "gcp_project_id" {
