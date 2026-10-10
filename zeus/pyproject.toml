@@ -8,6 +8,7 @@ dependencies = [
     "dependency-injector[pydantic2]>=4.49.0",
     "fastapi>=0.136.3",
     "funcy>=2.0",
+    "google-cloud-secret-manager>=2.30.0",
     "httptools>=0.8.0",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.14.1",

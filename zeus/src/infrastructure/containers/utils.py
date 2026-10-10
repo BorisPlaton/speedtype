@@ -1,8 +1,8 @@
-from infrastructure.containers.application import ApplicationContainer
-from infrastructure.settings import Settings
+from infrastructure.containers.application import ApplicationContainer, SettingsContainer
 
 
 def create_container() -> ApplicationContainer:
-    container = ApplicationContainer()
-    container.config.from_pydantic(Settings(), required=True)
-    return container
+    settings_container = SettingsContainer()
+    app_container = ApplicationContainer()
+    app_container.config.from_pydantic(settings_container.config(), required=True)
+    return app_container

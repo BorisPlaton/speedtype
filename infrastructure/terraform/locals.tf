@@ -1,0 +1,31 @@
+locals {
+  project_id  = var.project_id
+  environment = var.environment
+  region      = "europe-central2"
+  zone        = "europe-central2-a"
+
+  k8s_cluster = {
+    region       = local.region
+    zone         = local.zone
+    cluster_name = "speedtype"
+  }
+
+  artifact_registry = {
+    location      = local.region
+    repository_id = "speedtype-images-${local.environment}"
+    format        = "DOCKER"
+    description   = "Artifact registry for storing docker images of speedtype services."
+  }
+
+  apis = {
+    required = [
+      "iam.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "compute.googleapis.com",
+      "container.googleapis.com",
+      "artifactregistry.googleapis.com",
+      "secretmanager.googleapis.com",
+    ]
+    disable_on_destroy = false
+  }
+}
