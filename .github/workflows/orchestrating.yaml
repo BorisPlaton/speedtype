@@ -38,9 +38,7 @@ jobs:
   # Applies infrastructure changes on GCP.
   terraform:
     needs: changes
-    if: >-
-      github.ref == 'refs/heads/main'
-      needs.changes.outputs.terraform == 'true'
+    if: needs.changes.outputs.terraform == 'true'
     secrets: inherit
     uses: './.github/workflows/terraform.yaml'
     permissions:
