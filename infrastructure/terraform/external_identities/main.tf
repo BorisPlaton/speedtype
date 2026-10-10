@@ -49,30 +49,26 @@ resource "google_storage_bucket_iam_member" "allow_crud_on_remote_state" {
   member = "serviceAccount:${google_service_account.terraform_ci.email}"
 }
 
-############################
-## GITHUB ACTIONS SECRETS ##
-############################
+###################
+## PUSH IMAGE SA ##
+###################
 
-resource "github_actions_secret" "terraform_sa" {
-  repository      = local.github.repository
-  secret_name     = local.github.secrets.names.terraform_sa
-  plaintext_value = google_service_account.terraform_ci.email
+resource "google_service_account" "push_image_sa" {
+  account_id = local.terraform_sa.account_id
 }
 
-resource "github_actions_secret" "workload_identity_provider" {
-  repository      = local.github.repository
-  secret_name     = local.github.secrets.names.workload_identity_provider
-  plaintext_value = google_iam_workload_identity_pool_provider.github.name
+resource "google_service_account_iam_member" "push_image_sa_binding" {
+  service_account_id = google_service_account.push_image_sa.name
+  role               = local.push_image_sa.member_role
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.this.name}/attribute.repository/${local.github.full_repository_name}"
 }
 
-resource "github_actions_secret" "gcp_project_id" {
-  repository      = local.github.repository
-  secret_name     = local.github.secrets.names.gcp_project_id
-  plaintext_value = local.github.secrets.values.gcp_project_id
-}
+resource "google_artifact_registry_repository_iam_member" "ci_push" {
+  for_each = toset(local.push_image_sa.sa_member_roles)
 
-resource "github_actions_secret" "tf_remote_state_bucket" {
-  repository      = local.github.repository
-  secret_name     = local.github.secrets.names.tf_remote_state_bucket
-  plaintext_value = local.github.secrets.values.tf_remote_state_bucket
+  project    = local.project_id
+  location   = local.artifact_registry.location
+  repository = local.artifact_registry.name
+  role       = each.value
+  member     = "serviceAccount:${google_service_account.push_image_sa.email}"
 }

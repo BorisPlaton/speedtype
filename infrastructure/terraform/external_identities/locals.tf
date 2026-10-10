@@ -1,25 +1,16 @@
 locals {
   project_id = var.project_id
 
-  github = {
-    repository           = "speedtype"
-    full_repository_name = "BorisPlaton/speedtype"
+  workload_identity_pool_name = "external-identities"
 
-    secrets = {
-      names = {
-        gcp_project_id             = "GCP_PROJECT_ID"
-        tf_remote_state_bucket     = "TERRAFORM_REMOTE_STATE_BUCKET"
-        terraform_sa               = "TERRAFORM_SERVICE_ACCOUNT"
-        workload_identity_provider = "WORKLOAD_IDENTITY_PROVIDER"
-      }
-      values = {
-        gcp_project_id         = local.project_id
-        tf_remote_state_bucket = var.tf_remote_state_bucket_name
-      }
-    }
+  github = {
+    full_repository_name = "BorisPlaton/speedtype"
   }
 
-  workload_identity_pool_name = "external-identities"
+  artifact_registry = {
+    name     = var.artifact_registry_name
+    location = var.artifact_registry_location
+  }
 
   github_identity_pool = {
     provider_name       = "github-provider"
@@ -33,12 +24,13 @@ locals {
   }
 
   terraform_sa = {
+    account_id  = "terraform-ci"
+    member_role = "roles/iam.workloadIdentityUser"
+
     remote_state = {
       bucket_name = var.tf_remote_state_bucket_name
       role        = "roles/storage.objectUser"
     }
-    account_id  = "terraform-ci"
-    member_role = "roles/iam.workloadIdentityUser"
 
     sa_member_roles = [
       "roles/compute.networkAdmin",
@@ -47,6 +39,15 @@ locals {
       "roles/iam.serviceAccountAdmin",
       "roles/resourcemanager.projectIamAdmin",
       "roles/secretmanager.admin",
+    ]
+  }
+
+  push_image_sa = {
+    member_role            = "roles/iam.workloadIdentityUser"
+    artifact_registry_name = var.artifact_registry_name
+
+    sa_member_roles = [
+      "roles/artifactregistry.writer",
     ]
   }
 }

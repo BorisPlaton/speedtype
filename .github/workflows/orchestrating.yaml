@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - task/deploy-to-gcp
   pull_request:
 
 jobs:

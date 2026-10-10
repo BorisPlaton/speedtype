@@ -28,6 +28,8 @@ module "external_identities" {
   depends_on = [module.tf_remote_state]
 
   project_id                  = local.project_id
+  artifact_registry_name      = google_artifact_registry_repository.this.name
+  artifact_registry_location  = local.artifact_registry.location
   tf_remote_state_bucket_name = module.tf_remote_state.bucket_name
 }
 
@@ -48,4 +50,20 @@ module "zeus" {
 
   project_id  = local.project_id
   environment = local.environment
+}
+
+module "gha_secrets" {
+  source = "./gha_secrets"
+  depends_on = [
+    module.external_identities,
+    module.tf_remote_state
+  ]
+
+  secrets = {
+    GCP_PROJECT_ID                 = local.project_id
+    TERRAFORM_REMOTE_STATE_BUCKET  = module.tf_remote_state.bucket_name
+    GHA_WORKLOAD_IDENTITY_PROVIDER = module.external_identities.gha_workload_identity_provider
+    TERRAFORM_SERVICE_ACCOUNT      = module.external_identities.terraform_sa
+    PUSH_IMAGE_SERVICE_ACCOUNT     = module.external_identities.push_image_sa
+  }
 }
