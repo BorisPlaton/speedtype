@@ -36,6 +36,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -46,14 +47,12 @@ jobs:
       - name: Authenticate into Google
         id: auth
         uses: google-github-actions/auth@v2
-        if: github.ref == 'refs/pull/16/merge'
         with:
           workload_identity_provider: ${{ secrets.GHA_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.PUSH_IMAGE_SERVICE_ACCOUNT }}
           token_format: access_token
       - name: Login into artifact registry
         uses: docker/login-action@v3
-        if: github.ref == 'refs/pull/16/merge'
         with:
           registry: ${{ vars.ARTIFACT_REGISTRY_HOST }}
           username: oauth2accesstoken

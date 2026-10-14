@@ -1,4 +1,4 @@
-name: Orchestrating pipeline
+name: Orchestrating
 
 on:
   push:
@@ -10,6 +10,7 @@ jobs:
 
   # Checks what files have been changed.
   changes:
+    name: list changes
     runs-on: ubuntu-latest
     outputs:
       zeus: ${{ steps.filter.outputs.zeus }}
@@ -37,7 +38,9 @@ jobs:
   # Applies infrastructure changes on GCP.
   terraform:
     needs: changes
-    if: needs.changes.outputs.terraform == 'true'
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      needs.changes.outputs.terraform == 'true'
     secrets: inherit
     uses: './.github/workflows/terraform.yaml'
     permissions:
