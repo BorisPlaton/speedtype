@@ -55,3 +55,16 @@ repos:
         files: \.tf$
       - id: terraform_validate
         files: \.tf$
+
+  ################
+  ## Helm hooks ##
+  ################
+  - repo: local
+    hooks:
+      - id: lint mongodb helm
+        name: lint helm
+        entry: helm lint infrastructure/k8s/mongodb --set environment="dev" --set gcp.project_id="project-6dev2ff5-fake-1aa2-cl2"
+        language: system
+        pass_filenames: false
+        stages: [ pre-push ]
+        files: ^infrastructure/k8s/mongodb/

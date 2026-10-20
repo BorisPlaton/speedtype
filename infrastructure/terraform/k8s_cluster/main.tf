@@ -118,6 +118,25 @@ resource "google_compute_subnetwork" "subnet" {
   }
 }
 
+resource "google_compute_router" "this" {
+  name    = local.router.name
+  region  = local.subnet.region
+  network = google_compute_network.vpc.self_link
+}
+
+resource "google_compute_router_nat" "this" {
+  name                               = local.nat.name
+  router                             = google_compute_router.this.name
+  region                             = google_compute_router.this.region
+  nat_ip_allocate_option             = local.nat.nat_ip_allocate_option
+  source_subnetwork_ip_ranges_to_nat = local.nat.source_subnetwork_ip_ranges_to_nat
+
+  log_config {
+    enable = local.nat.log_config.enable
+    filter = local.nat.log_config.filter
+  }
+}
+
 #####################
 ## SERVICE ACCOUNT ##
 #####################

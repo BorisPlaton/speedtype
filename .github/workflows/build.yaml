@@ -6,6 +6,7 @@ on:
 jobs:
 
   check:
+    name: check code
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,6 +36,8 @@ jobs:
         run: just tests
 
   build:
+    needs: check
+    name: build and push image
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:

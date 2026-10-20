@@ -1,0 +1,24 @@
+environment: ""
+
+gcp:
+  projectId: ""
+  secrets:
+    mongodbPasswordName: "MONGODB_PASSWORD_"
+
+mongodb:
+  members: 3
+  storage_size: "5Gi"
+  admin:
+    username: "admin"
+  labels:
+    part_of: "speedtype"
+    component: "database"
+
+secrets:
+  target: "mongodb-creds"
+  storeName: "gcp-store"
+  gcpNames:
+    mongodbPassword: "MONGODB_PASSWORD_"
+  k8sNames:
+    mongodbPassword: "mongodb-password"
+    scramCredentials: "mongodb-scram"

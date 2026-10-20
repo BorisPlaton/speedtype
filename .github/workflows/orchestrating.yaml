@@ -63,14 +63,18 @@ jobs:
       contents: read
       id-token: write
 
-#  # Deploys components to the k8s cluster.
-#  deploy:
-#    needs: [ changes, build ]
-#    if: >-
-#      always() &&
-#      github.ref == 'refs/heads/main' &&
-#      !failure() &&
-#      !cancelled() &&
-#      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
-#    secrets: inherit
-#    uses: './.github/workflows/deploy.yaml'
+  # Deploys components to the k8s cluster.
+  cluster:
+    name: update k8s cluster
+    needs: [ changes, build ]
+    if: >-
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      !failure() &&
+      !cancelled() &&
+      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
+    secrets: inherit
+    uses: './.github/workflows/cluster.yaml'
+    permissions:
+      contents: read
+      id-token: write

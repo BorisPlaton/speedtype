@@ -15,12 +15,12 @@ locals {
     deletion_protection      = false
 
     node = {
-      node_count              = 1
+      node_count              = 2
       min_node_count          = 0
-      machine_type            = "e2-small"
+      machine_type            = "e2-standard-2"
       image_type              = "COS_CONTAINERD"
       spot                    = true
-      disk_size_gb            = 20
+      disk_size_gb            = 35
       disk_type               = "pd-standard"
       auto_repair             = true
       auto_upgrade            = true
@@ -33,6 +33,21 @@ locals {
   vpc = {
     auto_create_subnetworks = false
     name                    = "${local.cluster.name}-vpc-${local.cluster.environment}"
+  }
+
+  router = {
+    name = "${local.vpc.name}-router"
+  }
+
+  nat = {
+    name                               = "${local.vpc.name}-nat"
+    nat_ip_allocate_option             = "AUTO_ONLY"
+    source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+    log_config = {
+      enable = true
+      filter = "ERRORS_ONLY"
+    }
   }
 
   subnet = {

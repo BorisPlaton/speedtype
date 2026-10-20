@@ -25,24 +25,6 @@ resource "google_service_account_iam_member" "this" {
 ## SECRETS ##
 #############
 
-resource "google_secret_manager_secret" "mongodb_username" {
-  secret_id = local.secrets.mongodb_username.name
-
-  replication {
-    auto {}
-  }
-}
-
-resource "random_string" "mongodb_username" {
-  length = local.secrets.mongodb_username.length
-}
-
-resource "google_secret_manager_secret_version" "mongodb_username" {
-  secret      = google_secret_manager_secret.mongodb_username.id
-  secret_data = random_string.mongodb_username.result
-}
-
-
 resource "google_secret_manager_secret" "mongodb_password" {
   secret_id = local.secrets.mongodb_password.name
 
