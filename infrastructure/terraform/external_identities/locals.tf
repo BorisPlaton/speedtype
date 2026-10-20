@@ -1,7 +1,7 @@
 locals {
   project_id = var.project_id
 
-  workload_identity_pool_name = "external-identities"
+  workload_identity_pool_name = "workload-identities"
 
   github = {
     full_repository_name = "BorisPlaton/speedtype"

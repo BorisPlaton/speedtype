@@ -66,3 +66,11 @@ module "gha" {
     ARTIFACT_REGISTRY_URI  = google_artifact_registry_repository.this.registry_uri
   }
 }
+
+module "mongodb" {
+  source     = "./mongodb"
+  depends_on = [google_project_service.required_apis]
+
+  project_id  = local.project_id
+  environment = local.environment
+}

@@ -43,5 +43,5 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 GCP Secret Name for MongoDB Password
 */}}
 {{- define "mongodb.secrets.password" -}}
-{{- printf "%s-%s" .Values.secrets.gcpNames.mongodbPassword .Chart.environment | trunc 63 }}
+{{- printf "%s%s" .Values.secrets.gcpNames.mongodbPassword .Values.environment | trunc 63 }}
 {{- end }}

@@ -7,7 +7,7 @@ metadata:
 spec:
   members: {{ .Values.mongodb.members }}
   type: ReplicaSet
-  version: {{ .Chart.appVersion }}
+  version: {{ .Chart.AppVersion }}
   security:
     authentication:
       modes: ["SCRAM"]
