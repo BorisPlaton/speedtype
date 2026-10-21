@@ -24,7 +24,11 @@ resource "google_container_cluster" "this" {
   initial_node_count       = 1
 
   workload_identity_config {
-    workload_pool = "${local.project_id}.svc.id.goog"
+    workload_pool = local.cluster.workload_identity_config.workload_pool
+  }
+
+  gateway_api_config {
+    channel = local.cluster.gateway_api_config.channel
   }
 
   network_policy {

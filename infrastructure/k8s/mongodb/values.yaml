@@ -2,8 +2,6 @@ environment: ""
 
 gcp:
   projectId: ""
-  secrets:
-    mongodbPasswordName: "MONGODB_PASSWORD_"
 
 mongodb:
   members: 3

@@ -9,3 +9,7 @@ output "terraform_sa" {
 output "push_image_sa" {
   value = google_service_account.push_image_sa.email
 }
+
+output "helm_sa" {
+  value = google_service_account.helm_sa.email
+}

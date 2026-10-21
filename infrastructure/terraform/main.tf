@@ -60,10 +60,13 @@ module "gha" {
     GHA_WORKLOAD_IDENTITY_PROVIDER = module.external_identities.gha_workload_identity_provider
     TERRAFORM_SERVICE_ACCOUNT      = module.external_identities.terraform_sa
     PUSH_IMAGE_SERVICE_ACCOUNT     = module.external_identities.push_image_sa
+    HELM_SA                        = module.external_identities.helm_sa
   }
   variables = {
     ARTIFACT_REGISTRY_HOST = "${google_artifact_registry_repository.this.location}-docker.pkg.dev"
     ARTIFACT_REGISTRY_URI  = google_artifact_registry_repository.this.registry_uri
+    CLUSTER_NAME           = module.k8s_cluster.name
+    CLUSTER_LOCATION       = module.k8s_cluster.location
   }
 }
 

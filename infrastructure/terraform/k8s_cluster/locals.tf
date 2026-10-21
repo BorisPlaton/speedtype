@@ -28,6 +28,14 @@ locals {
       upgrade_max_unavailable = 0
       metadata_server_mode    = "GKE_METADATA"
     }
+
+    workload_identity_config = {
+      workload_pool = "${local.project_id}.svc.id.goog"
+    }
+
+    gateway_api_config = {
+      channel = "CHANNEL_STANDARD"
+    }
   }
 
   vpc = {

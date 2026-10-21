@@ -48,8 +48,14 @@ locals {
     member_role            = "roles/iam.workloadIdentityUser"
     artifact_registry_name = var.artifact_registry_name
 
-    sa_member_roles = [
+    registry_member_roles = [
       "roles/artifactregistry.writer",
     ]
+  }
+
+  helm_sa = {
+    account_id  = "helm-sa"
+    member_role = "roles/iam.workloadIdentityUser"
+    role        = "roles/container.admin"
   }
 }

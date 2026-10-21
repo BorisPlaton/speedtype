@@ -36,11 +36,11 @@ jobs:
             k8s: ['infrastructure/k8s/**']
 
   # Applies infrastructure changes on GCP.
+  #    if: >-
+  #      github.ref == 'refs/heads/main' &&
+  #      needs.changes.outputs.terraform == 'true'
   terraform:
     needs: changes
-    if: >-
-      github.ref == 'refs/heads/main' &&
-      needs.changes.outputs.terraform == 'true'
     secrets: inherit
     uses: './.github/workflows/terraform.yaml'
     permissions:
@@ -50,13 +50,13 @@ jobs:
       environment: 'dev'
 
   # Builds and pushes Zeus docker image to the artifact registry.
+  #    if: >-
+  #      always() &&
+  #      needs.changes.outputs.zeus == 'true' &&
+  #      needs.terraform.result != 'failure' &&
+  #      needs.terraform.result != 'cancelled'
   build:
     needs: [ changes, terraform ]
-    if: >-
-      always() &&
-      needs.changes.outputs.zeus == 'true' &&
-      needs.terraform.result != 'failure' &&
-      needs.terraform.result != 'cancelled'
     secrets: inherit
     uses: './.github/workflows/build.yaml'
     permissions:
@@ -64,15 +64,15 @@ jobs:
       id-token: write
 
   # Deploys components to the k8s cluster.
+#  if: >-
+#    always() &&
+#    github.ref == 'refs/heads/main' &&
+#    !failure() &&
+#    !cancelled() &&
+#    (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
   cluster:
     name: update k8s cluster
     needs: [ changes, build ]
-    if: >-
-      always() &&
-      github.ref == 'refs/heads/main' &&
-      !failure() &&
-      !cancelled() &&
-      (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
     secrets: inherit
     uses: './.github/workflows/cluster.yaml'
     permissions:

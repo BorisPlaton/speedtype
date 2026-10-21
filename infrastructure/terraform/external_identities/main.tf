@@ -64,11 +64,31 @@ resource "google_service_account_iam_member" "push_image_sa_binding" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "ci_push" {
-  for_each = toset(local.push_image_sa.sa_member_roles)
+  for_each = toset(local.push_image_sa.registry_member_roles)
 
   project    = local.project_id
   location   = local.artifact_registry.location
   repository = local.artifact_registry.name
   role       = each.value
   member     = "serviceAccount:${google_service_account.push_image_sa.email}"
+}
+
+#############
+## HELM SA ##
+#############
+
+resource "google_service_account" "helm_sa" {
+  account_id = local.helm_sa.account_id
+}
+
+resource "google_project_iam_member" "helm_deployer" {
+  project = local.project_id
+  role    = local.helm_sa.role
+  member  = "serviceAccount:${google_service_account.helm_sa.email}"
+}
+
+resource "google_service_account_iam_member" "helm_sa_binding" {
+  service_account_id = google_service_account.helm_sa.name
+  role               = local.helm_sa.member_role
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.this.name}/attribute.repository/${local.github.full_repository_name}"
 }
