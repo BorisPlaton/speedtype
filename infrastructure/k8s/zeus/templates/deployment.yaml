@@ -24,10 +24,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             {{- toYaml .Values.service.ports | nindent 12 }}
-          {{ - with .Values.zeus.containerSecurityContext }}
+          {{- with .Values.zeus.containerSecurityContext }}
           securityContext:
-            {{ - toYaml . | nindent 12 }}
-          {{ - end }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.zeus.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
