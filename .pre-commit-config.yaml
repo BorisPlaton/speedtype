@@ -74,12 +74,12 @@ repos:
         files: ^infrastructure/k8s/gateway/
       - id: lint zeus helm
         name: lint zeus helm
-        entry: |
-          helm lint infrastructure/k8s/zeus \
-            --set "httpRoute.gateway.name=fake-name" \
-            --set "httpRoute.gateway.namespace=fake-namespace" \
-            --set "environment=dev" \
-            --set "zeus.image.repository=test/repo" \
+        entry: >-
+          helm lint infrastructure/k8s/zeus
+            --set "httpRoute.gateway.name=fake-name"
+            --set "httpRoute.gateway.namespace=fake-namespace"
+            --set "environment=dev"
+            --set "zeus.image.repository=test/repo"
             --set "zeus.image.tag=969a30f4d6497516c9f917c21b92a0470d345a58"
         language: system
         pass_filenames: false
