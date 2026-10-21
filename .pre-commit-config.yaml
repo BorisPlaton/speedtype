@@ -28,9 +28,6 @@ repos:
         pass_filenames: false
         stages: [ pre-commit ]
         files: ^zeus/
-
-  - repo: local
-    hooks:
       - id: zeus tests
         name: zeus tests
         entry: just --justfile zeus/justfile tests
