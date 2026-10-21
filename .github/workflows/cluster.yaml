@@ -30,7 +30,7 @@ jobs:
       - name: Auth into k8s cluster
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: ${{ vars.CLUSTER_NAME }}-${{ inputs.environment }}
+          cluster_name: ${{ vars.CLUSTER_NAME }}
           location: ${{ vars.CLUSTER_LOCATION }}
       - name: Set up helm
         uses: azure/setup-helm@v4
