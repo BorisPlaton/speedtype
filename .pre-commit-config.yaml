@@ -62,21 +62,21 @@ repos:
   - repo: local
     hooks:
       - id: lint mongodb helm
-        name: lint helm
+        name: lint mongodb helm
         entry: helm lint infrastructure/k8s/mongodb --set "environment=dev" --set "gcp.project_id=project-6dev2ff5-fake-1aa2-cl2"
         language: system
         pass_filenames: false
         stages: [ pre-push ]
         files: ^infrastructure/k8s/mongodb/
       - id: lint gateway helm
-        name: lint helm
+        name: lint gateway helm
         entry: helm lint infrastructure/k8s/gateway --set "name=fake"
         language: system
         pass_filenames: false
         stages: [ pre-push ]
         files: ^infrastructure/k8s/gateway/
       - id: lint zeus helm
-        name: lint helm
+        name: lint zeus helm
         entry: |
           helm lint infrastructure/k8s/zeus \
             --set "httpRoute.gateway.name=fake-name" \
