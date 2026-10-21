@@ -47,7 +47,7 @@ jobs:
             --version 2.12.0 \
             --rollback-on-failure \
             --wait --timeout 5m
-          helm upgrade --install mongodb-operator mongodb/mongodb-kubernetes \
+          helm upgrade --install mongodb-operator mongodb-operator/mongodb-kubernetes \
             --namespace "mongodb-${{ inputs.environment }}" --create-namespace \
             --version 1.13.0 \
             --rollback-on-failure \
