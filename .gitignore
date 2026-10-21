@@ -3,6 +3,9 @@
 __pycache__/
 .ruff_cache/
 coverage/
+.terraform/
 
 .DS_Store
 .coverage
+terraform.tfstate
+terraform.tfstate.backup

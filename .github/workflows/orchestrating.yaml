@@ -1,0 +1,83 @@
+name: Orchestrating
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  # Checks what files have been changed.
+  changes:
+    name: list changes
+    runs-on: ubuntu-latest
+    outputs:
+      zeus: ${{ steps.filter.outputs.zeus }}
+      terraform: ${{ steps.filter.outputs.terraform }}
+      k8s: ${{ steps.filter.outputs.k8s }}
+    permissions:
+      contents: read
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Filter changes
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            zeus: [
+              'zeus/src/**',
+              'zeus/Dockerfile',
+              'zeus/pyproject.toml',
+              'zeus/uv.lock',
+            ]
+            terraform: ['infrastructure/terraform/**']
+            k8s: ['infrastructure/k8s/**']
+
+  # Applies infrastructure changes on GCP.
+  #    if: >-
+  #      github.ref == 'refs/heads/main' &&
+  #      needs.changes.outputs.terraform == 'true'
+  terraform:
+    needs: changes
+    secrets: inherit
+    uses: './.github/workflows/terraform.yaml'
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      environment: 'dev'
+
+  # Builds and pushes Zeus docker image to the artifact registry.
+  #    if: >-
+  #      always() &&
+  #      needs.changes.outputs.zeus == 'true' &&
+  #      needs.terraform.result != 'failure' &&
+  #      needs.terraform.result != 'cancelled'
+  build:
+    needs: [ changes, terraform ]
+    secrets: inherit
+    uses: './.github/workflows/build.yaml'
+    permissions:
+      contents: read
+      id-token: write
+
+  # Deploys components to the k8s cluster.
+#  if: >-
+#    always() &&
+#    github.ref == 'refs/heads/main' &&
+#    !failure() &&
+#    !cancelled() &&
+#    (needs.changes.outputs.zeus == 'true' || needs.changes.outputs.k8s == 'true')
+  cluster:
+    name: update k8s cluster
+    needs: [ changes, build ]
+    secrets: inherit
+    uses: './.github/workflows/cluster.yaml'
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      environment: 'dev'

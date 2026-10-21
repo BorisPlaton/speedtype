@@ -1,0 +1,33 @@
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: {{ include "mongodb.release_name" . }}
+  labels:
+    {{- include "mongodb.labels" . | nindent 4 }}
+spec:
+  members: {{ .Values.mongodb.members }}
+  type: ReplicaSet
+  version: {{ .Chart.AppVersion }}
+  security:
+    authentication:
+      modes: ["SCRAM"]
+  users:
+    - name: {{ .Values.mongodb.admin.username }}
+      db: admin
+      passwordSecretRef:
+        name: {{ .Values.secrets.target }}
+        key: {{ .Values.secrets.k8sNames.mongodbPassword }}
+      roles:
+        - name: root
+          db: admin
+      scramCredentialsSecretName: {{ .Values.secrets.k8sNames.scramCredentials }}
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: {{ .Values.mongodb.storage_size }}

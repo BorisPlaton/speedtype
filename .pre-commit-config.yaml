@@ -1,28 +1,87 @@
-default_install_hook_types: [pre-commit, pre-push]
+default_install_hook_types: [ pre-commit, pre-push ]
 
 repos:
+
+  ##################
+  ## Common hooks ##
+  ##################
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: check-ast
       - id: check-yaml
+        exclude: ^infrastructure/k8s/
       - id: check-toml
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.11
-    hooks:
-      - id: ruff-format
-      - id: ruff-check
-        args: [ --fix ]
+
+  ##################
+  ## Python hooks ##
+  ##################
   - repo: local
     hooks:
+      - id: zeus format
+        name: zeus format
+        entry: just --justfile zeus/justfile format
+        language: system
+        pass_filenames: false
+        stages: [ pre-commit ]
+        files: ^zeus/
       - id: zeus tests
         name: zeus tests
         entry: just --justfile zeus/justfile tests
         language: system
         pass_filenames: false
-        always_run: true
-        types: [ python ]
         stages: [ pre-push ]
+        files: ^zeus/
+
+  #####################
+  ## Terraform hooks ##
+  #####################
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.109.1
+    hooks:
+      - id: terraform_fmt
+        args:
+          - --args=-diff
+          - --args=-write=true
+      - id: terraform_tflint
+        files: \.tf$
+      - id: terraform_trivy
+        files: \.tf$
+      - id: terraform_validate
+        files: \.tf$
+
+  ################
+  ## Helm hooks ##
+  ################
+  - repo: local
+    hooks:
+      - id: lint mongodb helm
+        name: lint mongodb helm
+        entry: helm lint infrastructure/k8s/mongodb --set "environment=dev" --set "gcp.project_id=project-6dev2ff5-fake-1aa2-cl2"
+        language: system
+        pass_filenames: false
+        stages: [ pre-push ]
+        files: ^infrastructure/k8s/mongodb/
+      - id: lint gateway helm
+        name: lint gateway helm
+        entry: helm lint infrastructure/k8s/gateway --set "name=fake"
+        language: system
+        pass_filenames: false
+        stages: [ pre-push ]
+        files: ^infrastructure/k8s/gateway/
+      - id: lint zeus helm
+        name: lint zeus helm
+        entry: >-
+          helm lint infrastructure/k8s/zeus
+            --set "httpRoute.gateway.name=fake-name"
+            --set "httpRoute.gateway.namespace=fake-namespace"
+            --set "environment=dev"
+            --set "zeus.image.repository=test/repo"
+            --set "zeus.image.tag=969a30f4d6497516c9f917c21b92a0470d345a58"
+        language: system
+        pass_filenames: false
+        stages: [ pre-push ]
+        files: ^infrastructure/k8s/zeus/
