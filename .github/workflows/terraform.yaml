@@ -12,6 +12,7 @@ jobs:
 
   apply:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
       TF_VAR_environment: ${{ inputs.environment }}
