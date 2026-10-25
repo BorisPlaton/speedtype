@@ -36,11 +36,13 @@ module "k8s_cluster" {
   source     = "./k8s_cluster"
   depends_on = [google_project_service.required_apis]
 
-  project_id  = local.project_id
-  region      = local.k8s_cluster.region
-  environment = local.environment
-  zone        = local.k8s_cluster.zone
-  name        = local.k8s_cluster.cluster_name
+  project_id                 = local.project_id
+  region                     = local.k8s_cluster.region
+  environment                = local.environment
+  zone                       = local.k8s_cluster.zone
+  name                       = local.k8s_cluster.cluster_name
+  artifact_registry_name     = google_artifact_registry_repository.this.name
+  artifact_registry_location = local.artifact_registry.location
 }
 
 module "zeus" {
