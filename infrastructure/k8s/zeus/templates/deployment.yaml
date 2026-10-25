@@ -59,3 +59,5 @@ spec:
               value: {{ .Values.zeus.env.mongodb.username | quote }}
             - name: MONGO_DATABASE_NAME
               value: {{ .Values.zeus.env.mongodb.databaseName | quote }}
+            - name: GCP_ENV
+              value: {{ .Values.environment | quote }}

@@ -1,6 +1,7 @@
 import tomllib
 from pathlib import Path
 
+import google
 from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -54,8 +55,13 @@ class MongoDBSettings(BaseSettings):
 class GCPConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="GCP_")
 
-    PROJECT_ID: str | None = None
     ENV: str | None = None
+
+    @computed_field
+    @property
+    def PROJECT_ID(self) -> str:  # noqa: N802
+        _, project_id = google.auth.default()
+        return project_id
 
 
 class Settings(BaseSettings):
