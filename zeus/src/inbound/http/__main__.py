@@ -12,7 +12,7 @@ if __name__ == "__main__":
         port=settings.zeus.PORT,
         factory=True,
         log_level=settings.zeus.LOG_LEVEL,
-        workers=4,
+        workers=settings.zeus.WORKERS,
         reload=settings.zeus.DEBUG,
         reload_dirs=str(settings.zeus.ROOT_DIR),
     )

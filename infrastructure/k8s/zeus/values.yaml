@@ -41,6 +41,7 @@ zeus:
       logLevel: INFO
       port: 8080
       debug: false
+      workers: 1
     mongodb:
       port: 27017
       username: admin

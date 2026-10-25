@@ -15,6 +15,7 @@ class ZeusSettings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     PORT: int = 8080
     DEBUG: bool = False
+    WORKERS: int = 3
 
     @computed_field
     @property

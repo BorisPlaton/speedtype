@@ -46,13 +46,15 @@ spec:
             - name: ZEUS_LOG_LEVEL
               value: {{ .Values.zeus.env.zeus.logLevel | quote }}
             - name: ZEUS_PORT
-              value: {{ .Values.zeus.env.zeus.port | quote }}
+              value: {{ .Values.zeus.env.zeus.port }}
             - name: ZEUS_DEBUG
               value: {{ .Values.zeus.env.zeus.debug | quote }}
+            - name: ZEUS_WORKERS
+              value: {{ .Values.zeus.env.zeus.workers }}
             - name: MONGO_HOST
               value: {{ include "zeus.env.mongodb.host" . }}
             - name: MONGO_PORT
-              value: {{ .Values.zeus.env.mongodb.port | quote }}
+              value: {{ .Values.zeus.env.mongodb.port }}
             - name: MONGO_USERNAME
               value: {{ .Values.zeus.env.mongodb.username | quote }}
             - name: MONGO_DATABASE_NAME
