@@ -15,4 +15,4 @@ spec:
             value: /
       backendRefs:
         - name: {{ include "zeus.name" . }}
-          port: http
+          port: {{ .Values.service.port }}
