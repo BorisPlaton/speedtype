@@ -39,7 +39,7 @@ zeus:
     zeus:
       appName: zeus
       logLevel: INFO
-      port: 8080
+      port: 8000
       debug: false
       workers: 1
     mongodb:

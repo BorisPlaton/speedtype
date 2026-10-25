@@ -23,7 +23,7 @@ spec:
           image: {{ include "zeus.image.name" . }}
           imagePullPolicy: {{ .Values.zeus.image.pullPolicy }}
           ports:
-            {{- toYaml .Values.service.ports | nindent 12 }}
+            {{- toYaml .Values.zeus.ports | nindent 12 }}
           {{- with .Values.zeus.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
