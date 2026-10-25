@@ -64,7 +64,7 @@ resource "google_service_account_iam_member" "push_image_sa_binding" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "ci_push" {
-  for_each = toset(local.push_image_sa.registry_member_roles)
+  for_each = toset(local.push_image_sa.artifact_registry.roles)
 
   project    = local.project_id
   location   = local.artifact_registry.location

@@ -74,9 +74,20 @@ locals {
     }
   }
 
+  artifact_registry = {
+    name     = var.artifact_registry_name
+    location = var.artifact_registry_location
+  }
+
   node_sa = {
     account_id   = "${local.cluster.name}-${local.cluster.environment}-node-sa"
     display_name = "GKE node service account."
     role         = "roles/container.defaultNodeServiceAccount"
+
+    artifact_registry = {
+      roles = [
+        "roles/artifactregistry.reader",
+      ]
+    }
   }
 }

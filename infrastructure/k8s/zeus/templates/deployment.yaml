@@ -13,14 +13,14 @@ spec:
       labels:
         {{- include "zeus.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "zeus.serviceAccountName" . }}
+      serviceAccountName: {{ include "zeus.serviceAccount.name" . }}
       {{- with .Values.zeus.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.zeus.image.repository }}:{{ .Values.zeus.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "zeus.image.name" . }}
           imagePullPolicy: {{ .Values.zeus.image.pullPolicy }}
           ports:
             {{- toYaml .Values.service.ports | nindent 12 }}
@@ -40,3 +40,20 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      env:
+        - name: ZEUS_APP_NAME
+          value: {{ .Values.env.zeus.appName | quote }}
+        - name: ZEUS_LOG_LEVEL
+          value: {{ .Values.env.zeus.logLevel | quote }}
+        - name: ZEUS_PORT
+          value: {{ .Values.env.zeus.port | quote }}
+        - name: ZEUS_DEBUG
+          value: {{ .Values.env.zeus.debug | quote }}
+        - name: MONGO_HOST
+          value: {{ include "zeus.env.mongodb.host" . }}
+        - name: MONGO_PORT
+          value: {{ .Values.env.mongo.port | quote }}
+        - name: MONGO_USERNAME
+          value: {{ .Values.env.mongo.username | quote }}
+        - name: MONGO_DATABASE_NAME
+          value: {{ .Values.env.mongo.databaseName | quote }}

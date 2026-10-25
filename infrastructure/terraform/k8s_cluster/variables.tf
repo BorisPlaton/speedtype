@@ -22,3 +22,13 @@ variable "environment" {
   description = "Cluster's environment."
   type        = string
 }
+
+variable "artifact_registry_name" {
+  description = "Artifact registry name from which nodes pull pods' images."
+  type        = string
+}
+
+variable "artifact_registry_location" {
+  description = "Artifact registry location from which nodes pull pods' images."
+  type        = string
+}

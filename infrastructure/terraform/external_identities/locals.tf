@@ -44,13 +44,14 @@ locals {
   }
 
   push_image_sa = {
-    account_id             = "push-image-sa"
-    member_role            = "roles/iam.workloadIdentityUser"
-    artifact_registry_name = var.artifact_registry_name
+    account_id  = "push-image-sa"
+    member_role = "roles/iam.workloadIdentityUser"
 
-    registry_member_roles = [
-      "roles/artifactregistry.writer",
-    ]
+    artifact_registry = {
+      roles = [
+        "roles/artifactregistry.writer",
+      ]
+    }
   }
 
   helm_sa = {

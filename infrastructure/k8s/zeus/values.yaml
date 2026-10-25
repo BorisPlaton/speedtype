@@ -35,6 +35,16 @@ zeus:
     requests:
       cpu: 100m
       memory: 128Mi
+  env:
+    zeus:
+      appName: zeus
+      logLevel: INFO
+      port: 8080
+      debug: false
+    mongodb:
+      port: 27017
+      username: admin
+      databaseName: zeus
 
 service:
   type: ClusterIP

@@ -42,6 +42,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Kubernetes service account name
 */}}
-{{- define "zeus.serviceAccountName" -}}
+{{- define "zeus.serviceAccount.name" -}}
 {{- printf "%s-%s-ksa" .Chart.Name .Values.environment }}
+{{- end }}
+
+{{/*
+Zeus image name
+*/}}
+{{- define "zeus.image.name" -}}
+{{- printf "%s:%s" .Values.zeus.image.repository .Values.zeus.image.tag | default .Chart.AppVersion }}
+{{- end }}
+
+{{/*
+MongoDB host
+*/}}
+{{- define "zeus.env.mongodb.host" -}}
+{{- printf "mongodb-database-mongodb-svc.mongodb-%s.svc.cluster.local" .Values.environment }}
 {{- end }}

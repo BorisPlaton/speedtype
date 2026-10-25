@@ -19,6 +19,7 @@ jobs:
         working-directory: './infrastructure/k8s'
     env:
       GATEWAY_NAMESPACE: "infra-${{ inputs.environment }}"
+      ZEUS_NAMESPACE: "zeus-${{ inputs.environment }}"
       GATEWAY_NAME: "external-http"
     steps:
       - name: Check out repository
@@ -70,7 +71,7 @@ jobs:
       - name: install zeus
         run: |
           helm upgrade --install zeus ./zeus \
-            --namespace "${GATEWAY_NAMESPACE}" --create-namespace \
+            --namespace "${ZEUS_NAMESPACE}" --create-namespace \
             --rollback-on-failure \
             --wait --timeout 5m \
             --set "httpRoute.gateway.name=${GATEWAY_NAME}" \

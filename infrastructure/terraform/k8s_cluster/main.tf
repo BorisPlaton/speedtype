@@ -155,3 +155,13 @@ resource "google_project_iam_member" "gke_node_sa_role" {
   role    = local.node_sa.role
   member  = "serviceAccount:${google_service_account.gke_node_sa.email}"
 }
+
+resource "google_artifact_registry_repository_iam_member" "node_pull" {
+  for_each = toset(local.node_sa.artifact_registry.roles)
+
+  project    = local.project_id
+  location   = local.artifact_registry.location
+  repository = local.artifact_registry.name
+  role       = each.value
+  member     = "serviceAccount:${google_service_account.gke_node_sa.email}"
+}

@@ -31,6 +31,7 @@ class MongoDBSettings(BaseSettings):
 
     HOST: str
     PORT: int
+    USERNAME: str
     DATABASE_NAME: str
     TIMEOUT: int = 5_000
     AUTH_SOURCE: str = "admin"
@@ -47,11 +48,6 @@ class MongoDBSettings(BaseSettings):
     @property
     def PASSWORD(self) -> str:  # noqa: N802
         return self.secret_manager.fetch_secret(name="MONGO_PASSWORD")
-
-    @computed_field
-    @property
-    def USERNAME(self) -> str:  # noqa: N802
-        return self.secret_manager.fetch_secret(name="MONGO_USERNAME")
 
 
 class GCPConfig(BaseSettings):
