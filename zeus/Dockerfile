@@ -13,7 +13,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH="/app/src"
-ENV PATH="/app/.venv:${PATH}"
+ENV PATH="/app/.venv/bin:${PATH}"
 
 RUN useradd -ms /bin/sh -u 1001 app
 COPY --from=base --chown=app:app /.venv /app/.venv

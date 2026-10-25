@@ -1,10 +1,11 @@
 import uvicorn
 
-from infrastructure.settings import Settings
+from infrastructure.containers.utils import create_settings_container
 
 
 if __name__ == "__main__":
-    settings = Settings()
+    settings_container = create_settings_container()
+    settings = settings_container.config()
     uvicorn.run(
         "inbound.http.app:create_app",
         host="0.0.0.0",
