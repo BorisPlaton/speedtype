@@ -1,5 +1,6 @@
 import tomllib
 from pathlib import Path
+from urllib.parse import quote_plus
 
 import google
 from pydantic import Field, computed_field
@@ -42,7 +43,7 @@ class MongoDBSettings(BaseSettings):
     @property
     def URI(self) -> str:  # noqa: N802
         return (
-            f"mongodb://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/"
+            f"mongodb://{quote_plus(self.USERNAME)}:{quote_plus(self.PASSWORD)}@{self.HOST}:{self.PORT}/"
             f"{self.DATABASE_NAME}?authSource={self.AUTH_SOURCE}"
         )
 
