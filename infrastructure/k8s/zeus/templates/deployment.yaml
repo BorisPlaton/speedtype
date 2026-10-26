@@ -51,13 +51,13 @@ spec:
               value: {{ .Values.zeus.env.zeus.debug | quote }}
             - name: ZEUS_WORKERS
               value: {{ .Values.zeus.env.zeus.workers | quote }}
-            - name: MONGO_HOST
+            - name: MONGODB_HOST
               value: {{ include "zeus.env.mongodb.host" . }}
-            - name: MONGO_PORT
+            - name: MONGODB_PORT
               value: {{ .Values.zeus.env.mongodb.port | quote }}
-            - name: MONGO_USERNAME
+            - name: MONGODB_USERNAME
               value: {{ .Values.zeus.env.mongodb.username | quote }}
-            - name: MONGO_DATABASE_NAME
+            - name: MONGODB_DATABASE_NAME
               value: {{ .Values.zeus.env.mongodb.databaseName | quote }}
             - name: GCP_ENV
               value: {{ .Values.environment | quote }}

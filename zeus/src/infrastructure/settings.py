@@ -28,7 +28,7 @@ class ZeusSettings(BaseSettings):
 
 
 class MongoDBSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="MONGO_")
+    model_config = SettingsConfigDict(env_prefix="MONGODB_")
     secret_manager: SecretManager = Field(exclude=True)
 
     HOST: str
@@ -49,7 +49,7 @@ class MongoDBSettings(BaseSettings):
     @computed_field
     @property
     def PASSWORD(self) -> str:  # noqa: N802
-        return self.secret_manager.fetch_secret(name="MONGO_PASSWORD")
+        return self.secret_manager.fetch_secret(name="MONGODB_PASSWORD")
 
 
 class GCPConfig(BaseSettings):

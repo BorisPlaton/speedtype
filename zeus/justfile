@@ -62,9 +62,9 @@ migrate:
 [env("ENV_FILE", env_file)]
 mongodb-connect:
     docker compose exec mongodb mongosh \
-        --username "${MONGO_USERNAME}" \
-        --password "${MONGO_PASSWORD}" \
-        --host "${MONGO_HOST}" \
-        --port "${MONGO_PORT}" \
+        --username "${MONGODB_USERNAME}" \
+        --password "${MONGODB_PASSWORD}" \
+        --host "${MONGODB_HOST}" \
+        --port "${MONGODB_PORT}" \
         --authenticationDatabase admin \
-        "${MONGO_DATABASE_NAME}"
+        "${MONGODB_DATABASE_NAME}"
