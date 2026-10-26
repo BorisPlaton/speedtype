@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter
 
 
 router = APIRouter(
@@ -6,10 +6,7 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/health",
-    status_code=status.HTTP_204_NO_CONTENT,
-)
+@router.get("/health")
 def health() -> None:
     """
     Zeus's health check endpoint.

@@ -21,7 +21,7 @@ COPY --chown=app:app . ./
 
 USER app
 
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+HEALTHCHECK --interval=15s --timeout=2s --retries=3 \
     CMD curl "localhost:${ZEUS_PORT}/health"
 
 ENTRYPOINT ["python", "./src/inbound/http"]

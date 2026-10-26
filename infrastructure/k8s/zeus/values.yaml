@@ -37,14 +37,13 @@ zeus:
     readOnlyRootFilesystem: true
   resources:
     limits:
-      cpu: 100m
+      cpu: 300m
       memory: 256Mi
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 128Mi
   env:
     zeus:
-      appName: zeus
       logLevel: INFO
       port: 8000
       debug: false
@@ -66,3 +65,9 @@ httpRoute:
   gateway:
     name: ""
     namespace: ""
+
+healthCheckPolicy:
+  checkIntervalSec: 10
+  timeoutSec: 2
+  healthyThreshold: 1
+  unhealthyThreshold: 3

@@ -1,0 +1,18 @@
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  default:
+    checkIntervalSec: {{ .Values.healthCheckPolicy.checkIntervalSec }}
+    timeoutSec: {{ .Values.healthCheckPolicy.timeoutSec }}
+    healthyThreshold: {{ .Values.healthCheckPolicy.healthyThreshold }}
+    unhealthyThreshold: {{ .Values.healthCheckPolicy.unhealthyThreshold }}
+    config:
+      type: HTTP
+      httpHealthCheck:
+        requestPath: {{ .Values.zeus.livenessProbe.httpGet.path }}
+  targetRef:
+    group: ""
+    kind: Service
+    name: {{ include "zeus.name" . }}

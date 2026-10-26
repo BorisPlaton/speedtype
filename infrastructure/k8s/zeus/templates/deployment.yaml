@@ -41,8 +41,6 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            - name: ZEUS_APP_NAME
-              value: {{ .Chart.AppName | quote }}
             - name: ZEUS_LOG_LEVEL
               value: {{ .Values.zeus.env.zeus.logLevel | quote }}
             - name: ZEUS_PORT

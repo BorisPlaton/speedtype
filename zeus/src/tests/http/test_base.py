@@ -27,5 +27,4 @@ async def test_internal_server_error(
 async def test_health_check_endpoint(zeus_client: AsyncClient) -> None:
     response = await zeus_client.get("/health")
 
-    assert response.status_code == 204, response.text
-    assert response.content == b""
+    assert response.status_code == 200, response.text

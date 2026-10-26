@@ -26,15 +26,15 @@ services:
     image: mongo:7.0.34
     env_file:
       - "${ENV_FILE}"
-    command: [ "--port", "${MONGO_PORT}" ]
+    command: [ "--port", "${MONGODB_PORT}" ]
     volumes:
       - mongodb:/data/db
     healthcheck:
       test: [
         "CMD", "mongosh",
-        "--port", "${MONGO_PORT}",
-        "-u", "${MONGO_INITDB_ROOT_USERNAME}",
-        "-p", "${MONGO_INITDB_ROOT_PASSWORD}",
+        "--port", "${MONGODB_PORT}",
+        "-u", "${MONGODB_INITDB_ROOT_USERNAME}",
+        "-p", "${MONGODB_INITDB_ROOT_PASSWORD}",
         "--authenticationDatabase", "admin",
         "--eval", "db.adminCommand('ping')"
       ]
