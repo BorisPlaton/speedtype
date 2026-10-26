@@ -32,8 +32,8 @@ spec:
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.zeus.readinessProbe }}
-          readinessProbe:
+          {{- with .Values.zeus.startupProbe }}
+          startupProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.zeus.resources }}
