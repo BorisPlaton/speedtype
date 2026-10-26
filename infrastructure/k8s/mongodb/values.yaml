@@ -4,7 +4,7 @@ gcp:
   projectId: ""
 
 mongodb:
-  members: 3
+  members: 1
   storage_size: "5Gi"
   admin:
     username: "admin"

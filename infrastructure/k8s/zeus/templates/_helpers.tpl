@@ -57,5 +57,5 @@ Zeus image name
 MongoDB host
 */}}
 {{- define "zeus.env.mongodb.host" -}}
-{{- printf "mongodb-database-mongodb-svc.mongodb-%s.svc.cluster.local" .Values.environment }}
+{{- printf "mongodb-mongodb-svc.mongodb-%s.svc.cluster.local" .Values.environment }}
 {{- end }}
