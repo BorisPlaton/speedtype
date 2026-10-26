@@ -78,4 +78,5 @@ jobs:
             --set "httpRoute.gateway.namespace=${GATEWAY_NAMESPACE}" \
             --set "environment=${{ inputs.environment }}" \
             --set "zeus.image.repository=${{ vars.ARTIFACT_REGISTRY_URI }}/zeus" \
-            --set "zeus.image.tag=${{ github.sha }}"
+            --set "zeus.image.tag=${{ github.sha }}" \
+            --set "serviceAccount.name=${{ secrets.POD_SERVICE_ACCOUNT }}"

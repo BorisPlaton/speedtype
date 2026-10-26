@@ -60,6 +60,7 @@ service:
 
 serviceAccount:
   automount: false
+  name: ""
 
 httpRoute:
   gateway:
