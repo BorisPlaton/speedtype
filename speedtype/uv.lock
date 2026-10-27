@@ -809,6 +809,7 @@ name = "speedtype"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "aiohttp" },
     { name = "dependency-injector", extra = ["pydantic2"] },
     { name = "funcy" },
     { name = "pydantic" },
@@ -826,6 +827,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "aiohttp", specifier = ">=3.13.5" },
     { name = "dependency-injector", extras = ["pydantic2"], specifier = ">=4.49.1" },
     { name = "funcy", specifier = ">=2.0" },
     { name = "pydantic", specifier = ">=2.13.4" },

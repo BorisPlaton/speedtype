@@ -17,7 +17,7 @@ format:
 
 # Run speedtype in dev mode.
 run-dev:
-    ZEUS_URL="http://localhost:3550/" textual run --dev src/speedtype/main.py
+    uv run --env-file .env.local textual run --dev src/speedtype/main.py
 
 # Run textual's console for debugging. Used only for the development purposes.
 run-dev-console:
