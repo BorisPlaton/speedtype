@@ -1,8 +1,12 @@
 import tomllib
 from pathlib import Path
+from urllib.parse import quote_plus
 
-from pydantic import computed_field
+import google
+from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from infrastructure.secret_manager.base import SecretManager
 
 
 class ZeusSettings(BaseSettings):
@@ -13,6 +17,7 @@ class ZeusSettings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     PORT: int = 8080
     DEBUG: bool = False
+    WORKERS: int = 3
 
     @computed_field
     @property
@@ -24,12 +29,12 @@ class ZeusSettings(BaseSettings):
 
 
 class MongoDBSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="MONGO_")
+    model_config = SettingsConfigDict(env_prefix="MONGODB_")
+    secret_manager: SecretManager = Field(exclude=True)
 
     HOST: str
     PORT: int
     USERNAME: str
-    PASSWORD: str
     DATABASE_NAME: str
     TIMEOUT: int = 5_000
     AUTH_SOURCE: str = "admin"
@@ -37,9 +42,42 @@ class MongoDBSettings(BaseSettings):
     @computed_field
     @property
     def URI(self) -> str:  # noqa: N802
-        return f"mongodb://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DATABASE_NAME}?authSource={self.AUTH_SOURCE}"
+        return (
+            f"mongodb://{quote_plus(self.USERNAME)}:{quote_plus(self.PASSWORD)}@{self.HOST}:{self.PORT}/"
+            f"{self.DATABASE_NAME}?authSource={self.AUTH_SOURCE}"
+        )
+
+    @computed_field
+    @property
+    def PASSWORD(self) -> str:  # noqa: N802
+        return self.secret_manager.fetch_secret(name="MONGODB_PASSWORD")
+
+
+class GCPConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="GCP_")
+
+    ENV: str | None = None
+
+    @computed_field
+    @property
+    def PROJECT_ID(self) -> str:  # noqa: N802
+        _, project_id = google.auth.default()
+        return project_id
 
 
 class Settings(BaseSettings):
-    zeus: ZeusSettings = ZeusSettings()
-    mongodb: MongoDBSettings = MongoDBSettings()
+    zeus: ZeusSettings
+    mongodb: MongoDBSettings
+
+    @classmethod
+    def new(
+        cls,
+        *,
+        secret_manager: SecretManager,
+    ) -> Settings:
+        return cls(
+            zeus=ZeusSettings(),
+            mongodb=MongoDBSettings(
+                secret_manager=secret_manager,
+            ),
+        )

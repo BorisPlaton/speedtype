@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "zeus.release_name" . }}
+  labels:
+    {{- include "zeus.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "zeus.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "zeus.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "zeus.serviceAccount.name" . }}
+      {{- with .Values.zeus.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "zeus.image.name" . }}
+          imagePullPolicy: {{ .Values.zeus.image.pullPolicy }}
+          ports:
+            {{- toYaml .Values.zeus.ports | nindent 12 }}
+          {{- with .Values.zeus.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.zeus.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.zeus.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.zeus.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: ZEUS_LOG_LEVEL
+              value: {{ .Values.zeus.env.zeus.logLevel | quote }}
+            - name: ZEUS_PORT
+              value: {{ .Values.zeus.env.zeus.port | quote }}
+            - name: ZEUS_DEBUG
+              value: {{ .Values.zeus.env.zeus.debug | quote }}
+            - name: ZEUS_WORKERS
+              value: {{ .Values.zeus.env.zeus.workers | quote }}
+            - name: MONGODB_HOST
+              value: {{ include "zeus.env.mongodb.host" . }}
+            - name: MONGODB_PORT
+              value: {{ .Values.zeus.env.mongodb.port | quote }}
+            - name: MONGODB_USERNAME
+              value: {{ .Values.zeus.env.mongodb.username | quote }}
+            - name: MONGODB_DATABASE_NAME
+              value: {{ .Values.zeus.env.mongodb.databaseName | quote }}
+            - name: GCP_ENV
+              value: {{ .Values.environment | quote }}

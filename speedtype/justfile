@@ -6,23 +6,22 @@ help:
 init:
     uv python install 3.14
     uv venv --python 3.14 --clear
-    source .venv/bin/activate && \
-      uv sync && \
-      pre-commit install
+    uv sync
+    uv run pre-commit install
     echo "Project initialized. Dependencies, pre-commit hooks successfully installed."
 
 # Check the project files and fixes them if it is possible.
 format:
-    ruff format
-    ruff check --fix
+    uv run ruff format
+    uv run ruff check --fix
 
 # Run speedtype in dev mode.
 run-dev:
-    ZEUS_URL="http://localhost:3550/" textual run --dev src/speedtype/main.py
+    uv run --env-file .env.local textual run --dev src/speedtype/main.py
 
 # Run textual's console for debugging. Used only for the development purposes.
 run-dev-console:
-    textual console -x SYSTEM -x EVENT -x DEBUG -x INFO
+    uv run textual console -x SYSTEM -x EVENT -x DEBUG -x INFO
 
 # Installs speedtype globally.
 install:

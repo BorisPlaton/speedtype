@@ -22,3 +22,9 @@ async def test_internal_server_error(
 
     assert response.status_code == 500, response.text
     assert response.json() == snapshot
+
+
+async def test_health_check_endpoint(zeus_client: AsyncClient) -> None:
+    response = await zeus_client.get("/health")
+
+    assert response.status_code == 200, response.text

@@ -1,4 +1,4 @@
-env_file := "./envs/.env.local"
+env_file := ".env.local"
 
 set dotenv-path := env_file
 set dotenv-load
@@ -11,23 +11,27 @@ help:
 init:
     uv python install 3.14
     uv venv --python 3.14 --clear
-    source .venv/bin/activate && \
-      uv sync && \
-      pre-commit install
+    uv sync
+    uv run pre-commit install
     echo "Project initialized. Dependencies, pre-commit hooks successfully installed."
 
 # Check the project files and fixes them if it is possible.
 format:
-    ruff format
-    ruff check --fix
+    uv run ruff format
+    uv run ruff check --fix --show-fixes --respect-gitignore
+
+# Check whether files pass linting and code style.
+lint:
+    uv run ruff format --exit-non-zero-on-format
+    uv run ruff check --exit-non-zero-on-fix --diff --respect-gitignore
 
 # Run zeus's tests. It is possible to specify a test path for the pytest.
-tests path = ".":
-    pytest -vv {{ path }}
+tests path=".":
+    uv run pytest -vv {{ path }}
 
 # Update snapshots for tests.
 tests-snapshot-update:
-    pytest --snapshot-update -vv
+    uv run pytest --snapshot-update -vv
 
 # Start zeus and all corresponding services.
 [env("COMPOSE_ENV_FILES", env_file)]
@@ -58,9 +62,9 @@ migrate:
 [env("ENV_FILE", env_file)]
 mongodb-connect:
     docker compose exec mongodb mongosh \
-        --username "${MONGO_USERNAME}" \
-        --password "${MONGO_PASSWORD}" \
-        --host "${MONGO_HOST}" \
-        --port "${MONGO_PORT}" \
+        --username "${MONGODB_USERNAME}" \
+        --password "${MONGODB_PASSWORD}" \
+        --host "${MONGODB_HOST}" \
+        --port "${MONGODB_PORT}" \
         --authenticationDatabase admin \
-        "${MONGO_DATABASE_NAME}"
+        "${MONGODB_DATABASE_NAME}"

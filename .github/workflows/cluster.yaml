@@ -1,0 +1,82 @@
+name: Modify K8s cluster
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Environment for which cluster changes are applied
+        type: string
+        required: true
+
+jobs:
+
+  install:
+    name: install charts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: './infrastructure/k8s'
+    env:
+      GATEWAY_NAMESPACE: "infra-${{ inputs.environment }}"
+      ZEUS_NAMESPACE: "zeus-${{ inputs.environment }}"
+      GATEWAY_NAME: "external-http"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Authenticate into Google
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GHA_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.HELM_SA }}
+      - name: Auth into k8s cluster
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ vars.CLUSTER_LOCATION }}
+      - name: Set up helm
+        uses: azure/setup-helm@v4
+      - name: add remote repositories
+        run: >-
+          helm repo add external-secrets https://charts.external-secrets.io &&
+          helm repo add mongodb-operator https://mongodb.github.io/helm-charts &&
+          helm repo update
+      - name: install dependency charts
+        run: |
+          helm upgrade --install external-secrets external-secrets/external-secrets \
+            --namespace external-secrets --create-namespace \
+            --version 2.12.0 \
+            --rollback-on-failure \
+            --wait --timeout 5m
+          helm upgrade --install mongodb-operator mongodb-operator/mongodb-kubernetes \
+            --namespace "mongodb-${{ inputs.environment }}" --create-namespace \
+            --version 1.13.0 \
+            --rollback-on-failure \
+            --wait --timeout 5m
+      - name: install mongodb
+        run: |
+          helm upgrade --install mongodb ./mongodb \
+            --namespace "mongodb-${{ inputs.environment }}" --create-namespace \
+            --rollback-on-failure \
+            --wait --timeout 5m \
+            --set "environment=${{ inputs.environment }}" \
+            --set "gcp.projectId=${{ secrets.GCP_PROJECT_ID }}"
+      - name: install gateway
+        run: |
+          helm upgrade --install gateway ./gateway \
+            --namespace "${GATEWAY_NAMESPACE}" --create-namespace \
+            --rollback-on-failure \
+            --wait --timeout 5m \
+            --set "gateway.name=${GATEWAY_NAME}"
+      - name: install zeus
+        run: |
+          helm upgrade --install zeus ./zeus \
+            --namespace "${ZEUS_NAMESPACE}" --create-namespace \
+            --rollback-on-failure \
+            --wait --timeout 5m \
+            --set "httpRoute.gateway.name=${GATEWAY_NAME}" \
+            --set "httpRoute.gateway.namespace=${GATEWAY_NAMESPACE}" \
+            --set "environment=${{ inputs.environment }}" \
+            --set "zeus.image.repository=${{ vars.ARTIFACT_REGISTRY_URI }}/zeus" \
+            --set "zeus.image.tag=${{ github.sha }}" \
+            --set "serviceAccount.name=${{ secrets.POD_SERVICE_ACCOUNT }}"

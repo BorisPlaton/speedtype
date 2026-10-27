@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "TUI for training typing speed."
 requires-python = ">=3.14"
 dependencies = [
+    "aiohttp>=3.13.5",
     "dependency-injector[pydantic2]>=4.49.1",
     "funcy>=2.0",
     "pydantic>=2.13.4",

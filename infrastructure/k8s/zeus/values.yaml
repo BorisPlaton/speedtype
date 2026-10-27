@@ -1,0 +1,73 @@
+environment: ""
+
+zeus:
+  labels:
+    part_of: "speedtype"
+    component: "backend"
+  ports:
+    - name: http
+      containerPort: 8000
+      protocol: TCP
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 3
+  startupProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 25
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  image:
+    repository: ""
+    pullPolicy: IfNotPresent
+    tag: ""
+  podSecurityContext:
+    fsGroup: 2000
+  containerSecurityContext:
+    capabilities:
+      drop:
+        - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  env:
+    zeus:
+      logLevel: INFO
+      port: 8000
+      debug: false
+      workers: 1
+    mongodb:
+      port: 27017
+      username: admin
+      databaseName: zeus
+
+service:
+  type: ClusterIP
+  port: 80
+
+serviceAccount:
+  automount: false
+  name: ""
+
+httpRoute:
+  gateway:
+    name: ""
+    namespace: ""
+
+healthCheckPolicy:
+  checkIntervalSec: 10
+  timeoutSec: 2
+  healthyThreshold: 1
+  unhealthyThreshold: 3
