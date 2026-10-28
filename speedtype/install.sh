@@ -1,26 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+SPEEDTYPE_URL="git+https://github.com/BorisPlaton/speedtype#subdirectory=speedtype"
 
 echo "Installing 'speedtype'."
 
-if ! command -v uv &> /dev/null
-then
+if ! command -v uv >/dev/null 2>&1; then
     echo "'uv' is missing. Installing 'uv'."
     curl -LsSf https://astral.sh/uv/install.sh | sh
-    echo "'uv' installed"
-
-    if [ -x ~/.local/bin/uv ]; then
-        ~/.local/bin/uv tool install --reinstall --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype/speedtype
-    else
-        echo "Please restart your shell and run this script again."
-        exit 0
-    fi
-else
-    uv tool install --reinstall --python 3.14 git+https://github.com/TypeSpeedOrg/speedtype/speedtype
+    export PATH="$HOME/.local/bin:$PATH"
 fi
+
+uv tool install --reinstall --python 3.14 "$SPEEDTYPE_URL"
 
 echo ""
 echo "'speedtype' is installed!"
-echo ""
+echo "If 'speedtype' is not found, restart your shell or run: uv tool update-shell"
 echo "Run 'speedtype' to launch."

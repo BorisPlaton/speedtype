@@ -15,7 +15,7 @@ locals {
     deletion_protection      = false
 
     node = {
-      node_count              = 2
+      node_count              = 3
       min_node_count          = 0
       machine_type            = "e2-standard-2"
       image_type              = "COS_CONTAINERD"
